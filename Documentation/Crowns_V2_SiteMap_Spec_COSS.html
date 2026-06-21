@@ -156,7 +156,7 @@ tbody tr:hover td,table tr:hover td{background:rgb(255 255 255 / 2.5%)}
 .legend-handle:hover{background:var(--accent)}
 .legend-handle .lh-ico{font-size:14px;line-height:1;color:var(--muted-foreground)}
 body.legend-open .legend-handle{opacity:0;pointer-events:none}
-.legend-panel{position:fixed;top:0;right:0;height:100vh;width:344px;max-width:88vw;background:var(--popover);border-left:1px solid var(--border);z-index:70;transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-16px 0 48px rgb(0 0 0 / 0.5)}
+.legend-panel{position:fixed;top:0;right:0;height:100vh;width:344px;max-width:88vw;background:var(--popover);border-left:1px solid var(--border);z-index:400;transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-16px 0 48px rgb(0 0 0 / 0.5)}
 body.legend-open .legend-panel{transform:translateX(0)}
 .lp-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--popover)}
 .lp-head b{font-family:var(--font-heading);font-size:13.5px;font-weight:600;letter-spacing:-.01em}
@@ -169,7 +169,7 @@ body.legend-open .legend-panel{transform:translateX(0)}
 </style>
 </head>
 <body>
-<div style="position:fixed;top:14px;right:16px;z-index:300;display:flex;gap:3px;background:rgba(18,19,23,.92);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:3px;backdrop-filter:blur(6px);font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600">
+<div style="position:absolute;top:14px;right:16px;z-index:50;display:flex;gap:3px;background:rgba(18,19,23,.92);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:3px;backdrop-filter:blur(6px);font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600">
   <a href="Crowns_V2_SiteMap_Spec_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#0e0f12;background:#fff">ENG</a>
   <a href="Crowns_V2_SiteMap_Spec_UA_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#cfd1d6">UKR</a>
 </div>
