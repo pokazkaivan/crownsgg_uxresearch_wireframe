@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crowns — UX Delivery</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --fg:#1a1a1a; --muted:#6b6b6b;
+    --border:rgba(0,0,0,.12); --border-soft:rgba(0,0,0,.07); --strong:#262626;
+    --shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px -16px rgba(0,0,0,.18);
+    --radius:16px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1120px;margin:0 auto;padding:54px 24px 80px}
+  /* language switch */
+  .lang{position:fixed;top:16px;right:18px;z-index:50;display:flex;gap:3px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--shadow);font-family:var(--mono);font-size:12px}
+  .lang button{border:none;background:transparent;color:var(--muted);padding:6px 11px;border-radius:7px;cursor:pointer;font:inherit;font-weight:600;letter-spacing:.03em}
+  .lang button.on{background:var(--strong);color:#fff}
+  /* header logos */
+  .logos{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:40px}
+  .logos img{height:28px;width:auto;display:block}
+  .logos .x{color:var(--muted);font-size:18px;font-weight:300}
+  /* intro */
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:14px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.5px;text-align:center;margin:0 auto 16px;max-width:780px;font-weight:700}
+  .lead{text-align:center;color:var(--muted);font-size:15.5px;max-width:680px;margin:0 auto 14px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:22px auto 0;max-width:780px}
+  .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:20px;padding:5px 12px;background:var(--card)}
+  /* cards */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr;max-width:440px;margin-left:auto;margin-right:auto}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;transition:transform .16s ease,box-shadow .16s ease}
+  .card:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(0,0,0,.06),0 22px 48px -20px rgba(0,0,0,.28)}
+  .thumb{position:relative;border-bottom:1px solid var(--border-soft);aspect-ratio:16/10;overflow:hidden}
+  .thumb svg{width:100%;height:100%;display:block}
+  .num{position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:11px;font-weight:600;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:7px;padding:3px 8px;backdrop-filter:blur(4px)}
+  .body{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .card h3{font-size:18px;margin:0 0 8px;letter-spacing:-.2px}
+  .card p{font-size:13.5px;color:var(--muted);margin:0 0 18px;flex:1}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600;text-decoration:none;border-radius:10px;padding:11px 16px;border:1px solid transparent;cursor:pointer}
+  .btn.primary{background:var(--strong);color:#fff}
+  .btn.primary:hover{background:#000}
+  .foot{margin-top:56px;text-align:center;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border-soft);padding-top:22px}
+</style>
+</head>
+<body>
+
+<div class="lang" role="group" aria-label="Language">
+  <button id="lang-en" class="on" onclick="setLang('en')">ENG</button>
+  <button id="lang-uk" onclick="setLang('uk')">UKR</button>
+</div>
+
+<div class="wrap">
+
+  <div class="logos">
+    <img src="assets/Crowns_Logo.svg" alt="Crowns">
+    <span class="x">×</span>
+    <img src="assets/Tresor.svg" alt="Tresor">
+  </div>
+
+  <div class="kicker" data-i18n="kicker"></div>
+  <h1 data-i18n="h1"></h1>
+  <p class="lead" data-i18n="lead"></p>
+  <div class="pills" id="pills"></div>
+
+  <div class="grid">
+
+    <!-- 1 · DOCUMENTATION -->
+    <div class="card">
+      <div class="thumb">
+        <span class="num">01</span>
+        <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Documentation preview">
+          <rect width="400" height="250" fill="#0e0f12"/>
+          <rect x="0" y="0" width="118" height="250" fill="#121317"/>
+          <rect x="18" y="22" width="56" height="9" rx="2" fill="#e8e8ea"/>
+          <rect x="18" y="46" width="78" height="5" rx="2" fill="#3a3c42"/>
+          <rect x="18" y="60" width="64" height="5" rx="2" fill="#3a3c42"/>
+          <rect x="18" y="80" width="40" height="5" rx="2" fill="#56585f"/>
+          <g fill="#2b2d33">
+            <rect x="18" y="100" width="82" height="5" rx="2"/><rect x="18" y="114" width="70" height="5" rx="2"/>
+            <rect x="18" y="128" width="86" height="5" rx="2"/><rect x="18" y="142" width="62" height="5" rx="2"/>
+            <rect x="18" y="156" width="78" height="5" rx="2"/><rect x="18" y="170" width="68" height="5" rx="2"/>
+            <rect x="18" y="184" width="84" height="5" rx="2"/><rect x="18" y="198" width="58" height="5" rx="2"/>
+          </g>
+          <rect x="146" y="26" width="120" height="7" rx="2" fill="#43464d"/>
+          <rect x="146" y="44" width="210" height="14" rx="3" fill="#ededef"/>
+          <rect x="146" y="70" width="226" height="5" rx="2" fill="#34363c"/>
+          <rect x="146" y="82" width="200" height="5" rx="2" fill="#34363c"/>
+          <g>
+            <rect x="146" y="108" width="106" height="62" rx="8" fill="#16181d" stroke="#26282e"/>
+            <rect x="266" y="108" width="106" height="62" rx="8" fill="#16181d" stroke="#26282e"/>
+            <rect x="158" y="122" width="46" height="14" rx="4" fill="#2a2c32"/>
+            <rect x="278" y="122" width="46" height="14" rx="4" fill="#2a2c32"/>
+            <rect x="158" y="146" width="80" height="4" rx="2" fill="#3a3c42"/>
+            <rect x="278" y="146" width="80" height="4" rx="2" fill="#3a3c42"/>
+            <rect x="158" y="156" width="60" height="4" rx="2" fill="#3a3c42"/>
+            <rect x="278" y="156" width="60" height="4" rx="2" fill="#3a3c42"/>
+          </g>
+          <rect x="146" y="184" width="226" height="44" rx="8" fill="#16181d" stroke="#26282e"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag" data-i18n="c1tag"></div>
+        <h3 data-i18n="c1title"></h3>
+        <p data-i18n="c1desc"></p>
+        <a class="btn primary" id="doc-link" href="Documentation/Crowns_V2_SiteMap_Spec_COSS.html" data-i18n="c1btn"></a>
+      </div>
+    </div>
+
+    <!-- 2 · FIGJAM -->
+    <div class="card">
+      <div class="thumb">
+        <span class="num">02</span>
+        <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="FigJam site map preview">
+          <rect width="400" height="250" fill="#fbfbfc"/>
+          <defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1.4" cy="1.4" r="1.1" fill="#e7e8ec"/></pattern></defs>
+          <rect width="400" height="250" fill="url(#dots)"/>
+          <g>
+            <rect x="24" y="26" width="52" height="20" rx="5" fill="#f4b740"/>
+            <rect x="86" y="26" width="52" height="20" rx="5" fill="#f4b740"/>
+            <rect x="148" y="26" width="52" height="20" rx="5" fill="#f4b740"/>
+            <rect x="244" y="26" width="44" height="20" rx="5" fill="#56c16a"/>
+            <rect x="296" y="26" width="44" height="20" rx="5" fill="#56c16a"/>
+          </g>
+          <g fill="none" stroke="#f4b740" stroke-width="2">
+            <path d="M50 46 V70 H70 V92"/><path d="M112 46 V78 H188 V104"/><path d="M174 46 V70 H300 V104"/>
+          </g>
+          <rect x="26" y="92" width="96" height="118" rx="9" fill="#ffffff" stroke="#d7d9df"/>
+          <rect x="36" y="104" width="60" height="8" rx="2" fill="#9aa0ad"/>
+          <rect x="36" y="122" width="76" height="34" rx="5" fill="#bfeef0"/>
+          <rect x="36" y="164" width="34" height="34" rx="5" fill="#cfe3ff"/>
+          <rect x="78" y="164" width="34" height="34" rx="5" fill="#cfe3ff"/>
+          <rect x="140" y="104" width="112" height="106" rx="9" fill="#ffffff" stroke="#d7d9df"/>
+          <rect x="150" y="116" width="60" height="8" rx="2" fill="#9aa0ad"/>
+          <rect x="150" y="132" width="92" height="26" rx="5" fill="#cfe3ff"/>
+          <rect x="150" y="164" width="44" height="34" rx="5" fill="#f9c9e0"/>
+          <rect x="198" y="164" width="44" height="34" rx="5" fill="#f9c9e0"/>
+          <rect x="268" y="104" width="106" height="106" rx="9" fill="#ffffff" stroke="#d7d9df"/>
+          <rect x="278" y="116" width="58" height="8" rx="2" fill="#9aa0ad"/>
+          <rect x="278" y="132" width="86" height="22" rx="5" fill="#d8ccff"/>
+          <rect x="278" y="160" width="86" height="40" rx="5" fill="#f9c9e0"/>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag" data-i18n="c2tag"></div>
+        <h3 data-i18n="c2title"></h3>
+        <p data-i18n="c2desc"></p>
+        <a class="btn primary" href="https://www.figma.com/board/MUfvjZEGJ4fx8OqEuEtRcS/Crown---Site-Map---Mind-Maps?node-id=0-1" target="_blank" rel="noopener" data-i18n="c2btn"></a>
+      </div>
+    </div>
+
+    <!-- 3 · PROTOTYPE -->
+    <div class="card">
+      <div class="thumb">
+        <span class="num">03</span>
+        <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prototype preview">
+          <rect width="400" height="250" fill="#ffffff"/>
+          <rect x="0" y="0" width="400" height="34" fill="#ffffff" stroke="#ececec"/>
+          <rect x="20" y="13" width="42" height="9" rx="2" fill="#1a1a1a"/>
+          <g fill="#cfcfcf"><rect x="84" y="14" width="26" height="6" rx="2"/><rect x="118" y="14" width="26" height="6" rx="2"/><rect x="152" y="14" width="30" height="6" rx="2"/><rect x="190" y="14" width="30" height="6" rx="2"/></g>
+          <rect x="300" y="9" width="34" height="16" rx="5" fill="#f0f0f0"/>
+          <rect x="340" y="9" width="44" height="16" rx="5" fill="#1a1a1a"/>
+          <rect x="0" y="34" width="400" height="16" fill="#fafafa" stroke="#f0f0f0"/>
+          <defs><pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4.5" height="9" fill="#f1f1f1"/></pattern></defs>
+          <rect x="20" y="62" width="360" height="86" rx="9" fill="url(#hatch)" stroke="#e5e5e5"/>
+          <rect x="178" y="98" width="44" height="14" rx="3" fill="#d8d8d8"/>
+          <rect x="20" y="158" width="114" height="34" rx="7" fill="#fff" stroke="#ececec"/>
+          <rect x="143" y="158" width="114" height="34" rx="7" fill="#fff" stroke="#ececec"/>
+          <rect x="266" y="158" width="114" height="34" rx="7" fill="#fff" stroke="#ececec"/>
+          <g>
+            <rect x="20" y="204" width="84" height="40" rx="7" fill="url(#hatch)" stroke="#e5e5e5"/>
+            <rect x="112" y="204" width="84" height="40" rx="7" fill="url(#hatch)" stroke="#e5e5e5"/>
+            <rect x="204" y="204" width="84" height="40" rx="7" fill="url(#hatch)" stroke="#e5e5e5"/>
+            <rect x="296" y="204" width="84" height="40" rx="7" fill="url(#hatch)" stroke="#e5e5e5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="body">
+        <div class="tag" data-i18n="c3tag"></div>
+        <h3 data-i18n="c3title"></h3>
+        <p data-i18n="c3desc"></p>
+        <a class="btn primary" href="Wireframe/index.html#/" data-i18n="c3btn"></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot" data-i18n="foot"></div>
+</div>
+
+<script>
+  var I18N = {
+    en: {
+      kicker:"Crowns.gg × Tresor.tech · UX Delivery · June 2026",
+      h1:"Site map, FigJam canvas & clickable prototype",
+      lead:"This is the start page of the UX package for Crowns — an IRL platform for opening cases with real physical items. Everything is gathered into one flow: written spec → visual site map → interactive prototype. Pick where to start.",
+      pills:["IRL physical items","~25 MVP screens","Stage 2 flagged","Email + Discord OAuth","Cashier: crypto + gift cards"],
+      c1tag:"Site Map &amp; User Flow Spec", c1title:"Documentation",
+      c1desc:"Full written specification — every screen with its purpose, functions, access level, states, modals and connections. The single source of truth behind the canvas and the prototype. Inside: the left sidebar lists every screen — click to jump to its card; badges show access level (Public / Gated / Stage 2).",
+      c1btn:"Open documentation →",
+      c2tag:"FigJam · Site Map / Mind Map", c2title:"Site map (FigJam)",
+      c2desc:"An interactive visual map built from the documentation. Each screen is a node; arrows show the transitions between pages and the user flows. Great for reviewing the structure and team discussion.",
+      c2btn:"Open FigJam →",
+      c3tag:"Clickable wireframe", c3title:"Prototype",
+      c3desc:"A clickable front-end prototype — a full product emulation: case opening, battles, the upgrader, marketplace, rewards, cart and profile. Monochrome wireframe, no imagery. Open it and click like a real site.",
+      c3btn:"Open prototype →",
+      foot:"Crowns.gg × Tresor.tech · First version for the client · June 2026"
+    },
+    uk: {
+      kicker:"Crowns.gg × Tresor.tech · UX Delivery · Червень 2026",
+      h1:"Карта сайту, FigJam-канвас і клікабельний прототип",
+      lead:"Це стартова сторінка UX-пакета для Crowns — IRL-платформи відкриття кейсів із реальними фізичними предметами. Усе зібрано в один потік: текстова специфікація → візуальна карта сайту → інтерактивний прототип. Оберіть, з чого почати.",
+      pills:["IRL фізичні предмети","~25 екранів MVP","Stage 2 позначено","Email + Discord OAuth","Каса: крипта + gift cards"],
+      c1tag:"Site Map &amp; User Flow Spec", c1title:"Документація",
+      c1desc:"Повна текстова специфікація: кожен екран із призначенням, функціями, рівнем доступу, станами, модалками та звʼязками — джерело істини для канваса й прототипу. Усередині: ліворуч — навігація по екранах, клік відкриває потрібну картку; бейджі показують доступ (Public / Gated / Stage 2).",
+      c1btn:"Відкрити документацію →",
+      c2tag:"FigJam · Карта сайту / Mind Map", c2title:"Карта сайту (FigJam)",
+      c2desc:"Інтерактивна візуальна карта, зібрана на основі документації. Кожен екран — вузол, стрілки показують переходи між сторінками й користувацькі потоки. Зручно для огляду структури та командного обговорення.",
+      c2btn:"Відкрити FigJam →",
+      c3tag:"Клікабельний wireframe", c3title:"Прототип",
+      c3desc:"Клікабельний фронтенд-прототип — повна емуляція продукту: відкриття кейсів, баттли, апгрейдер, маркетплейс, нагороди, кошик і профіль. Монохромний wireframe без зображень. Відкрийте й клікайте, як на справжньому сайті.",
+      c3btn:"Відкрити прототип →",
+      foot:"Crowns.gg × Tresor.tech · Перша версія для клієнта · Червень 2026"
+    }
+  };
+  var DOC = { en:"Documentation/Crowns_V2_SiteMap_Spec_COSS.html", uk:"Documentation/Crowns_V2_SiteMap_Spec_UA_COSS.html" };
+  function setLang(l){
+    var d = I18N[l] || I18N.en;
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n"); if (d[k] != null) el.innerHTML = d[k];
+    });
+    var pills = document.getElementById("pills");
+    pills.innerHTML = d.pills.map(function(p){ return '<span class="pill">'+p+'</span>'; }).join("");
+    document.getElementById("doc-link").setAttribute("href", DOC[l] || DOC.en);
+    document.getElementById("lang-en").classList.toggle("on", l==="en");
+    document.getElementById("lang-uk").classList.toggle("on", l==="uk");
+    document.documentElement.lang = l;
+    try { localStorage.setItem("crowns_ux_lang", l); } catch(e){}
+  }
+  setLang((function(){ try { return localStorage.getItem("crowns_ux_lang") || "en"; } catch(e){ return "en"; } })());
+</script>
+</body>
+</html>

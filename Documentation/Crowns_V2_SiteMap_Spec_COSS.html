@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crowns — Site Map &amp; User Flow Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+/* COSS UI — Base UI / Cal.com style preset. Opaque (alpha) borders + bottom shadows for depth. */
+:root{
+  --radius:0.625rem;
+  --white:#ffffff;
+  --n50:#fafafa;--n100:#f5f5f5;--n200:#e5e5e5;--n400:#a3a3a3;--n500:#737373;--n800:#262626;--n950:#0a0a0a;
+  --background:color-mix(in srgb,var(--n950) 95%,var(--white));
+  --foreground:var(--n100);
+  --card:color-mix(in srgb,var(--background) 98%,var(--white));
+  --popover:color-mix(in srgb,var(--background) 95%,var(--white));
+  --primary:var(--n100);
+  --primary-foreground:var(--n800);
+  --secondary:rgb(255 255 255 / 4%);
+  --secondary-foreground:var(--n100);
+  --muted:rgb(255 255 255 / 4%);
+  --muted-foreground:color-mix(in srgb,var(--n500) 86%,var(--white));
+  --accent:rgb(255 255 255 / 6%);
+  --border:rgb(255 255 255 / 7%);
+  --border-strong:rgb(255 255 255 / 12%);
+  --input:rgb(255 255 255 / 8%);
+  --ring:var(--n500);
+  --destructive:#ef4444;--destructive-foreground:#f87171;
+  --info:#3b82f6;--info-foreground:#60a5fa;
+  --success:#10b981;--success-foreground:#34d399;
+  --warning:#f59e0b;--warning-foreground:#fbbf24;
+  --sidebar:color-mix(in srgb,var(--n950) 97%,var(--white));
+  --sidebar-foreground:color-mix(in srgb,var(--n100) 64%,var(--sidebar));
+  --sidebar-border:rgb(255 255 255 / 5%);
+  --shadow-xs:0 1px 2px 0 rgb(0 0 0 / 0.30);
+  --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.34),0 2px 6px -2px rgb(0 0 0 / 0.28);
+  --shadow-badge:0 1px 1px 0 rgb(0 0 0 / 0.18);
+  --font-sans:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-heading:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-sans);font-size:15px;line-height:1.6;letter-spacing:-0.006em;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border-strong)}
+
+.wrap{display:grid;grid-template-columns:256px 1fr;max-width:1440px;margin:0 auto}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;border-right:1px solid var(--sidebar-border);padding:22px 14px 56px;background:var(--sidebar)}
+.main{padding:48px 56px 120px;min-width:0}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--sidebar-border)}.main{padding:32px 22px 80px}}
+
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 4px}
+.mark{width:28px;height:28px;border-radius:8px;border:1px solid var(--border-strong);background:var(--card);display:grid;place-items:center;font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--foreground);box-shadow:var(--shadow-xs)}
+.brand b{font-size:13.5px;font-weight:600;font-family:var(--font-heading);letter-spacing:-.01em}
+.brand span{display:block;font-size:11.5px;color:var(--muted-foreground);font-weight:400}
+.side h4{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);margin:22px 8px 6px;font-weight:500}
+.side nav a{display:block;padding:5px 8px;border-radius:7px;color:var(--sidebar-foreground);font-size:13px;line-height:1.45}
+.side nav a:hover{background:var(--accent);color:var(--foreground);text-decoration:none}
+.side nav a.sub{padding-left:14px;font-size:12.5px}
+
+.hero{padding-bottom:30px;border-bottom:1px solid var(--border);margin-bottom:42px}
+.hero .kicker{font-size:12.5px;color:var(--muted-foreground);font-family:var(--font-mono);letter-spacing:-.01em}
+.hero h1{margin:14px 0 12px;font-family:var(--font-heading);font-size:34px;line-height:1.1;font-weight:600;letter-spacing:-.028em}
+.hero p{margin:0;color:var(--muted-foreground);max-width:680px;font-size:15.5px}
+.meta-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+.pill{font-size:12px;padding:3px 10px;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);color:var(--muted-foreground);background:var(--card);box-shadow:var(--shadow-xs)}
+
+section{margin:54px 0;scroll-margin-top:18px}
+h2{font-family:var(--font-heading);font-size:22px;letter-spacing:-.022em;font-weight:600;margin:0 0 6px;display:flex;align-items:center;gap:11px}
+h2 .ix{font-size:11px;color:var(--muted-foreground);font-family:var(--font-mono);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-weight:500;background:var(--card);box-shadow:var(--shadow-xs)}
+.lead{color:var(--muted-foreground);margin:0 0 26px;max-width:760px}
+h3{font-family:var(--font-heading);font-size:15px;font-weight:600;letter-spacing:-.01em;margin:36px 0 14px}
+
+/* COSS Badge variants */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:1px 8px;border-radius:calc(var(--radius) - 3px);border:1px solid transparent;line-height:1.5;white-space:nowrap;box-shadow:var(--shadow-badge)}
+.b-route{background:var(--card);color:var(--muted-foreground);border-color:var(--border-strong)}
+.b-modal{background:var(--primary);color:var(--primary-foreground);border-color:transparent}
+.b-public{background:color-mix(in srgb,var(--success) 14%,transparent);color:var(--success-foreground);border-color:color-mix(in srgb,var(--success) 30%,transparent)}
+.b-gated{background:color-mix(in srgb,var(--warning) 14%,transparent);color:var(--warning-foreground);border-color:color-mix(in srgb,var(--warning) 30%,transparent)}
+.b-hybrid{background:color-mix(in srgb,var(--info) 14%,transparent);color:var(--info-foreground);border-color:color-mix(in srgb,var(--info) 30%,transparent)}
+.b-stage2{background:color-mix(in srgb,var(--destructive) 14%,transparent);color:var(--destructive-foreground);border-color:color-mix(in srgb,var(--destructive) 30%,transparent)}
+
+/* legend */
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.legend .item{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.legend .item p{margin:9px 0 0;font-size:12.5px;color:var(--muted-foreground)}
+
+/* COSS CardFrame: header sits OUTSIDE the bordered panel */
+.grid{display:flex;flex-direction:column;gap:28px}
+.frame{scroll-margin-top:18px}
+.frame-head{display:grid;grid-template-columns:1fr auto;gap:5px 16px;padding:0 4px 12px}
+.frame-title-row{grid-column:1;grid-row:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.frame-title-row .num{font-family:var(--font-mono);font-size:12px;color:var(--muted-foreground)}
+.frame-title-row h4{margin:0;font-family:var(--font-heading);font-size:16px;font-weight:600;letter-spacing:-.012em}
+.frame-title-row .route{font-family:var(--font-mono);font-size:12px;color:var(--foreground);background:var(--muted);padding:2px 7px;border-radius:6px;border:1px solid var(--border)}
+.frame-desc{grid-column:1;grid-row:2;color:var(--muted-foreground);font-size:13.5px;max-width:760px}
+.frame-action{grid-column:2;grid-row:1 / span 2;align-self:center;justify-self:end;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.panel-body{padding:20px 22px}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:760px){.col2{grid-template-columns:1fr}.frame-head{grid-template-columns:1fr}.frame-action{grid-column:1;grid-row:auto;justify-self:start;margin-top:2px}}
+.block label{display:block;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);font-weight:500;margin-bottom:10px}
+.fn{list-style:none;margin:0;padding:0}
+.fn li{position:relative;padding:3px 0 3px 16px;font-size:13.5px;color:var(--foreground)}
+.fn li::before{content:"";position:absolute;left:1px;top:11px;width:4px;height:4px;border-radius:1px;background:var(--muted-foreground)}
+.fn li.opt{color:var(--muted-foreground)}
+.fn li.opt::before{background:var(--border-strong)}
+.fn small{color:var(--muted-foreground)}
+.states{display:flex;flex-wrap:wrap;gap:6px}
+.state{font-size:11.5px;font-family:var(--font-mono);padding:2px 8px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted-foreground);box-shadow:var(--shadow-xs)}
+.state.win{border-color:color-mix(in srgb,var(--success) 34%,transparent);color:var(--success-foreground)}
+.state.lose{border-color:color-mix(in srgb,var(--destructive) 34%,transparent);color:var(--destructive-foreground)}
+.conns{margin-top:18px;border-top:1px solid var(--border);padding-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.conns{grid-template-columns:1fr}}
+.conns .flow{font-size:13px;color:var(--muted-foreground)}
+.conns .flow .arrow{color:var(--foreground);font-weight:600}
+.conns label .ico{margin-right:5px;color:var(--muted-foreground)}
+
+/* COSS Table (variant=card): grid clipped to a framed panel */
+.table-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--card);margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);font-weight:500;background:rgb(255 255 255 / 2.5%)}
+td{color:var(--muted-foreground)}
+td:first-child{color:var(--foreground)}
+tbody tr:last-child td,table tr:last-child td{border-bottom:none}
+tbody tr:hover td,table tr:hover td{background:rgb(255 255 255 / 2.5%)}
+
+/* diagrams as COSS panels */
+.diagram{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:24px;margin:16px 0 0;overflow-x:auto;box-shadow:var(--shadow-sm)}
+.mermaid{display:flex;justify-content:center}
+
+/* COSS Alert */
+.note{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:14px 16px;margin:16px 0;font-size:13.5px;color:var(--muted-foreground);box-shadow:var(--shadow-xs)}
+.note b{color:var(--foreground);font-weight:600}
+.note.s2{border-color:color-mix(in srgb,var(--destructive) 24%,var(--border))}
+.note.s2 b{color:var(--destructive-foreground)}
+
+.swatches{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.sw{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted-foreground)}
+.sw i{width:20px;height:20px;border-radius:6px;display:block;border:1px solid var(--border-strong)}
+.foot{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted-foreground);font-size:12.5px}
+.tag-s2{font-size:10px;font-weight:500;color:var(--destructive-foreground);border:1px solid color-mix(in srgb,var(--destructive) 30%,transparent);border-radius:5px;padding:1px 6px;vertical-align:middle;margin-left:8px;font-family:var(--font-mono)}
+
+/* badge tooltips (COSS Tooltip) */
+.badge.has-tip{cursor:help}
+.tipbox{position:fixed;z-index:90;max-width:280px;background:var(--popover);border:1px solid var(--border-strong);color:var(--foreground);font-size:12px;line-height:1.45;padding:9px 11px;border-radius:calc(var(--radius) - 2px);box-shadow:var(--shadow-sm);opacity:0;pointer-events:none;transition:opacity .12s ease;letter-spacing:0;text-transform:none;font-weight:400}
+
+/* COSS Sheet: collapsible legend panel */
+.legend-handle{position:fixed;right:0;top:148px;z-index:60;display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border-strong);border-right:none;border-radius:8px 0 0 8px;color:var(--foreground);font-family:var(--font-sans);font-size:12.5px;font-weight:500;padding:10px 13px;cursor:pointer;box-shadow:var(--shadow-sm);transition:background .12s,opacity .18s}
+.legend-handle:hover{background:var(--accent)}
+.legend-handle .lh-ico{font-size:14px;line-height:1;color:var(--muted-foreground)}
+body.legend-open .legend-handle{opacity:0;pointer-events:none}
+.legend-panel{position:fixed;top:0;right:0;height:100vh;width:344px;max-width:88vw;background:var(--popover);border-left:1px solid var(--border);z-index:70;transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-16px 0 48px rgb(0 0 0 / 0.5)}
+body.legend-open .legend-panel{transform:translateX(0)}
+.lp-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--popover)}
+.lp-head b{font-family:var(--font-heading);font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.lp-close{display:grid;place-items:center;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted-foreground);cursor:pointer;font-size:13px}
+.lp-close:hover{background:var(--accent);color:var(--foreground)}
+.lp-body{padding:16px 16px 40px}
+.lp-item{border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-xs)}
+.lp-item p{margin:8px 0 0;font-size:12.5px;color:var(--muted-foreground)}
+@media(max-width:560px){.legend-panel{width:300px}}
+</style>
+</head>
+<body>
+<div style="position:fixed;top:14px;right:16px;z-index:300;display:flex;gap:3px;background:rgba(18,19,23,.92);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:3px;backdrop-filter:blur(6px);font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600">
+  <a href="Crowns_V2_SiteMap_Spec_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#0e0f12;background:#fff">ENG</a>
+  <a href="Crowns_V2_SiteMap_Spec_UA_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#cfd1d6">UKR</a>
+</div>
+<div class="wrap">
+
+<aside class="side">
+  <div class="brand" style="flex-direction:column;align-items:flex-start;gap:8px">
+    <svg viewBox="0 0 207 36" width="150" height="26" style="display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Crowns">
+      <path d="M141.621 5.10963H142.302C150.096 5.10963 157.894 5.10963 165.695 5.10963C165.893 5.09398 166.093 5.1285 166.274 5.21002C166.456 5.29154 166.614 5.41742 166.734 5.57602C170.004 9.54554 171.979 14.1473 173.123 19.1273C174.199 24.1039 174.677 29.1906 174.547 34.2799V35.9537H162.154V35.2956C162.21 30.8467 161.897 26.401 161.219 22.0034C160.262 16.36 158.417 11.0795 154.799 6.52954C154.57 6.24452 154.331 5.96469 153.993 5.5553V35.9693H141.621V5.10963Z" fill="white"/>
+      <path d="M92.4446 35.9999H70.1594C66.4841 35.9999 64.2645 34.3883 63.1104 30.8903C62.0708 27.8121 62.0084 24.6407 62.1539 21.4433C62.3983 16.0642 63.4379 10.7784 64.6179 5.52894C64.6959 5.18692 64.8363 5.104 65.1378 5.104C72.6026 5.104 80.0622 5.104 87.527 5.104C90.8175 5.104 93.006 6.88666 94.0716 10.2343C94.7947 12.7386 95.1158 15.3411 95.0229 17.9453C94.997 22.8425 94.2016 27.6463 93.2087 32.419C92.9904 33.6109 92.7149 34.7821 92.4446 35.9999ZM77.1355 5.56521C77.0887 5.72068 77.0575 5.81396 77.0367 5.90723C76.3454 9.64356 75.5656 13.3643 74.9938 17.1214C74.3668 20.7453 74.3054 24.4441 74.8119 28.0868C75.0281 29.9298 75.657 31.7008 76.6521 33.2689C77.0186 33.8659 77.5078 34.3787 78.0875 34.7735C78.6672 35.1683 79.3243 35.4361 80.0154 35.5594C80.0695 35.419 80.1146 35.2754 80.1505 35.1293C80.8211 31.5277 81.5801 27.9831 82.1519 24.3556C82.7632 20.8085 82.856 17.1919 82.4274 13.6183C82.2338 11.5825 81.5701 9.61907 80.4884 7.88163C80.1235 7.28293 79.6364 6.76736 79.0588 6.36831C78.4812 5.96927 77.826 5.69566 77.1355 5.56521Z" fill="white"/>
+      <path d="M177.042 5.10946H199.8C201.346 5.02937 202.881 5.41585 204.203 6.21844C204.972 6.737 205.606 7.4303 206.054 8.24118C206.501 9.05207 206.749 9.95733 206.776 10.8824C206.969 13.3957 206.937 15.9194 207 18.4846H194.524V17.7591C194.482 15.3131 194.461 12.8671 194.394 10.4212C194.359 9.85977 194.256 9.30466 194.087 8.76805C193.437 6.51382 191.81 5.41521 189.409 5.60177C189.385 5.7285 189.369 5.85658 189.362 5.98525C189.362 8.79915 189.362 11.6182 189.362 14.4321C189.371 15.0908 189.446 15.747 189.585 16.391C190.079 18.7488 191.514 20.0807 193.916 20.2517C195.777 20.3812 197.653 20.3139 199.519 20.3812C200.452 20.3879 201.382 20.4868 202.295 20.6766C204.894 21.2985 206.454 23.1433 206.776 25.8587C206.86 26.6696 206.9 27.4844 206.896 28.2995C206.896 30.844 206.896 33.3832 206.896 35.9639C206.667 35.9639 206.48 35.9639 206.293 35.9639H183.42C181.611 35.9639 179.937 35.596 178.627 34.2279C177.641 33.2068 177.058 31.8654 176.985 30.4501C176.834 27.859 176.834 25.268 176.771 22.6147H189.247C189.247 22.8635 189.247 23.0915 189.247 23.3195C189.279 25.8639 189.299 28.4083 189.362 30.9476C189.386 31.4764 189.482 31.9994 189.648 32.5022C190.266 34.6217 192.065 35.7255 194.467 35.4768C194.483 35.3686 194.493 35.2596 194.498 35.1503C194.498 32.3157 194.539 29.4811 194.472 26.6464C194.445 25.6383 194.27 24.6396 193.952 23.6822C193.24 21.6094 191.509 20.8372 189.481 20.7284C187.303 20.6144 185.12 20.687 182.937 20.6041C182.16 20.5715 181.391 20.4284 180.655 20.1791C179.598 19.8477 178.675 19.1884 178.02 18.2972C177.365 17.406 177.014 16.3296 177.016 15.225C176.927 11.9188 177.042 8.53486 177.042 5.10946Z" fill="white"/>
+      <path d="M33.0431 5.1097V14.8677H20.6763V5.70046L20.5463 5.64346C20.12 6.10467 19.6834 6.55551 19.2727 7.03227C16.1277 10.6598 13.7989 14.7588 12.7956 19.5057C11.9327 23.5633 12.2238 27.5017 14.2095 31.2173C15.2492 33.1761 16.7151 34.7256 18.966 35.3216C19.4858 35.4563 20.0057 35.4926 20.6503 35.591V26.1388H33.0119V35.9849H32.3673C24.5958 35.9849 16.8243 35.9382 9.04761 35.9849C5.64271 35.9849 3.36065 34.4302 1.84274 31.549C0.412652 28.7395 -0.204732 25.5886 0.059711 22.4491C0.418395 16.4378 2.97077 11.3801 6.84352 6.90272C7.36336 6.30159 7.82601 5.52427 8.49659 5.20816C9.16718 4.89205 9.98331 5.12006 10.7423 5.12006H33.0431V5.1097Z" fill="white"/>
+      <path d="M36.2773 5.14062H48.6546V17.5259L48.8677 17.5829C48.956 17.419 49.0241 17.245 49.0704 17.0647C49.5972 13.1988 50.117 9.33297 50.6299 5.4671C50.6472 5.36366 50.6715 5.2615 50.7027 5.16135H61.3229C60.7199 9.43662 60.1169 13.6911 59.5087 17.9923H48.6442V35.9692H36.2773V5.14062Z" fill="white"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M117.926 0L111.699 5.14586H124.097L117.926 0ZM108.663 5.14062H96.4727C97.7099 15.4254 98.9471 25.6999 100.184 35.964H112.286C112.153 34.7695 112.023 33.5854 111.893 32.4013C111.764 31.2172 111.634 30.033 111.501 28.8385H124.398C124.147 30.9073 123.903 32.9452 123.657 35.0023C123.618 35.3257 123.579 35.6497 123.54 35.9743H135.621C136.851 25.7137 138.089 15.4358 139.333 5.14062H127.231C127.11 6.16923 126.99 7.18456 126.869 8.19989C126.839 8.45314 126.809 8.7064 126.779 8.95986C126.29 13.0848 125.798 17.2098 125.303 21.3348C125.039 23.5286 124.772 25.7241 124.502 27.9213C124.459 28.0774 124.397 28.2272 124.315 28.367L124.107 28.31V5.18208H111.704V28.0508C111.711 28.1076 111.711 28.1651 111.704 28.2219C111.688 28.2556 111.665 28.2856 111.636 28.31C111.619 28.3163 111.601 28.3163 111.584 28.31C111.532 28.3168 111.48 28.3168 111.428 28.31C110.506 20.6024 109.585 12.8793 108.663 5.14062Z" fill="url(#paint0_linear_1_335)"/>
+      <mask id="mask0_1_335" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="96" y="0" width="44" height="36">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M117.926 0L111.699 5.14586H124.097L117.926 0ZM108.663 5.14062H96.4727C97.7099 15.4254 98.9471 25.6999 100.184 35.964H112.286C112.153 34.7695 112.023 33.5854 111.893 32.4013C111.764 31.2172 111.634 30.033 111.501 28.8385H124.398C124.147 30.9073 123.903 32.9452 123.657 35.0023C123.618 35.3257 123.579 35.6497 123.54 35.9743H135.621C136.851 25.7137 138.089 15.4358 139.333 5.14062H127.231C127.11 6.16923 126.99 7.18456 126.869 8.19989C126.839 8.45314 126.809 8.7064 126.779 8.95986C126.29 13.0848 125.798 17.2098 125.303 21.3348C125.039 23.5286 124.772 25.7241 124.502 27.9213C124.459 28.0774 124.397 28.2272 124.315 28.367L124.107 28.31V5.18208H111.704V28.0508C111.711 28.1076 111.711 28.1651 111.704 28.2219C111.688 28.2556 111.665 28.2856 111.636 28.31C111.619 28.3163 111.601 28.3163 111.584 28.31C111.532 28.3168 111.48 28.3168 111.428 28.31C110.506 20.6024 109.585 12.8793 108.663 5.14062Z" fill="url(#paint1_linear_1_335)"/>
+      </mask>
+      <g mask="url(#mask0_1_335)">
+      <g filter="url(#filter0_f_1_335)">
+      <path d="M141 13L97 16.9286L99 24L141 18.1071V13Z" fill="white" fill-opacity="0.78"/>
+      </g>
+      </g>
+      <path d="M122.688 23.3938V18.0049L118 15.3105L113.312 18.0049V23.3938L118 26.0881L122.688 23.3938Z" fill="#9F30AD"/>
+      <path d="M120.738 22.2731V19.1256L118 17.5518L115.262 19.1256V22.2731L118 23.8469L120.738 22.2731Z" fill="#C13AD8"/>
+      <path d="M118 17.5517V15.3105L122.688 18.0049L120.738 19.1256L118 17.5517Z" fill="#B138C6"/>
+      <path d="M120.738 22.2731V19.1256L122.688 18.0049V23.3938L120.738 22.2731Z" fill="#9733AF"/>
+      <path d="M118 23.8471V26.0882L122.688 23.3939L120.738 22.2732L118 23.8471Z" fill="#862F9B"/>
+      <path d="M115.262 22.2732L113.312 23.3939L118 26.0882V23.8471L115.262 22.2732Z" fill="#9733AF"/>
+      <path d="M114.182 18.0049L116.131 19.1256V22.2731L114.182 23.3938V18.0049Z" fill="#B138C6"/>
+      <path d="M118 17.5517L115.262 19.1256L113.312 18.0049L118 15.3105V17.5517Z" fill="#CA44EA"/>
+      <path d="M122.688 18.0049C121.999 18.3558 121.31 18.7065 120.62 19.0572L118.093 17.6047L118.001 15.3105L117.908 17.6047L115.381 19.0572C114.691 18.7065 114.002 18.3558 113.312 18.0049L115.262 19.1256V20.2439C115.299 19.8943 115.335 19.5447 115.372 19.1951C116.248 18.7208 117.124 18.2465 118.001 17.7723C118.877 18.2465 119.753 18.7208 120.629 19.1951C120.665 19.5447 120.702 19.8943 120.739 20.2439V19.1256L120.765 19.1105L122.688 18.0049Z" fill="#FDB4FF"/>
+      <path d="M118 15C117.946 15 117.892 15.0137 117.844 15.0415L113.156 17.7358C113.059 17.7915 113 17.894 113 18.0049V23.3938C113 23.5048 113.059 23.6072 113.156 23.6627L117.844 26.3573C117.892 26.385 117.946 26.3987 118 26.3987C118.054 26.3987 118.108 26.385 118.156 26.3573L122.844 23.6627C122.941 23.6072 123 23.5048 123 23.3938V18.0049C123 17.894 122.941 17.7915 122.844 17.7358L118.156 15.0415C118.108 15.0137 118.054 15 118 15ZM118 15.3106L122.688 18.0049V23.3938L118 26.0881L113.312 23.3938V18.0049L118 15.3106Z" fill="#DEAF34"/>
+      <g filter="url(#filter1_f_1_335)">
+      <path d="M121.676 13.2753L123.869 16.3437L127.627 16.6757L124.558 18.8694L124.226 22.6267L122.033 19.5583L118.275 19.2263L121.344 17.0325L121.676 13.2753Z" fill="white"/>
+      </g>
+      <defs>
+      <filter id="filter0_f_1_335" x="92" y="8" width="54" height="21" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="2.5" result="effect1_foregroundBlur_1_335"/></filter>
+      <filter id="filter1_f_1_335" x="117.075" y="12.0751" width="11.7516" height="11.7516" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="0.6" result="effect1_foregroundBlur_1_335"/></filter>
+      <linearGradient id="paint0_linear_1_335" x1="108.5" y1="36" x2="109.175" y2="17.302" gradientUnits="userSpaceOnUse"><stop stop-color="#DDA411"/><stop offset="1" stop-color="#FFDA7C"/></linearGradient>
+      <linearGradient id="paint1_linear_1_335" x1="108.5" y1="36" x2="109.175" y2="17.302" gradientUnits="userSpaceOnUse"><stop stop-color="#DDA411"/><stop offset="1" stop-color="#FFDA7C"/></linearGradient>
+      </defs>
+    </svg>
+    <div><span>Site Map &amp; Flow Spec</span></div>
+  </div>
+  <h4>Document</h4>
+  <nav>
+    <a href="#read">How to read this</a>
+    <a href="#direction">Product &amp; design direction</a>
+    <a href="#shell">Global shell &amp; navigation</a>
+    <a href="#ia">IA tree (canvas master)</a>
+    <a href="#gating">Access &amp; gating matrix</a>
+  </nav>
+  <h4>Core screens (MVP)</h4>
+  <nav>
+    <a class="sub" href="#s-home">01 · Home /</a>
+    <a class="sub" href="#s-cases">02 · Cases /cases</a>
+    <a class="sub" href="#s-case">03 · Case detail /cases/[slug]</a>
+    <a class="sub" href="#s-battles">04 · Battles lobby /battles</a>
+    <a class="sub" href="#s-bcreate">05 · Create battle</a>
+    <a class="sub" href="#s-broom">06 · Battle room /battles/[id]</a>
+    <a class="sub" href="#s-upgrade">07 · Upgrade /upgrade</a>
+    <a class="sub" href="#s-rewards">08 · Rewards /rewards</a>
+    <a class="sub" href="#s-aff">09 · Affiliates /affiliates</a>
+    <a class="sub" href="#s-market">10 · Marketplace /marketplace</a>
+    <a class="sub" href="#s-cart">10b · Cart /cart</a>
+    <a class="sub" href="#s-fair">11 · Provably Fair</a>
+    <a class="sub" href="#s-auth">12 · Auth (modals)</a>
+    <a class="sub" href="#s-profile">13 · Profile /profile</a>
+    <a class="sub" href="#s-showcase">14 · Public showcase</a>
+    <a class="sub" href="#s-inv">15 · Inventory /inventory</a>
+    <a class="sub" href="#s-wallet">16 · Wallet /wallet</a>
+    <a class="sub" href="#s-legal">17 · Legal</a>
+  </nav>
+  <h4>Flows</h4>
+  <nav>
+    <a href="#flow-onboard">Onboarding → first open</a>
+    <a href="#flow-open">Case opening loop</a>
+    <a href="#flow-battle">Battle loop</a>
+    <a href="#flow-cashout">Win → marketplace → shipment</a>
+    <a href="#flow-deposit">Deposit</a>
+  </nav>
+  <h4>Stage 2</h4>
+  <nav>
+    <a href="#stage2">Post-launch layer</a>
+  </nav>
+  <h4>Handoff</h4>
+  <nav>
+    <a href="#canvas">Canvas build notes</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="hero">
+    <div class="kicker">Crowns.gg × Tresor.tech · June 2026 · COSS UI</div>
+    <h1>Crowns — Site Map &amp; User Flow Specification</h1>
+    <p>The complete blueprint for the FigJam canvas and the interactive wireframe that follows. Every screen below is documented with its purpose, components &amp; functions, access level, interactive states, modals, and all inbound/outbound connections — so each card maps 1:1 to a node you place on the canvas.</p>
+    <div class="meta-row">
+      <span class="pill">Real-world (IRL) physical items</span>
+      <span class="pill">~24 MVP screens</span>
+      <span class="pill">Stage 2 layer flagged</span>
+      <span class="pill">Auth: Email + Discord OAuth</span>
+      <span class="pill">Cashier: Crypto + gift cards</span>
+      <span class="pill">Withdrawal = marketplace ticket</span>
+    </div>
+  </div>
+
+  <!-- HOW TO READ -->
+  <section id="read">
+    <h2><span class="ix">00</span> How to read this document</h2>
+    <p class="lead">Each screen frame carries a set of badges and four content blocks. On the canvas, treat each frame as one node/sticky group; treat each connection line as an arrow between frames.</p>
+    <div class="legend">
+      <div class="item"><span class="badge b-route">ROUTE</span><p>A real URL/page the user can land on or deep-link to.</p></div>
+      <div class="item"><span class="badge b-modal">MODAL</span><p>An overlay on top of the current page — no URL change. Returns user to where they were.</p></div>
+      <div class="item"><span class="badge b-public">PUBLIC</span><p>Viewable without an account. Drives SEO &amp; first impression.</p></div>
+      <div class="item"><span class="badge b-gated">GATED</span><p>Requires login. Any action here triggers the Auth modal if logged out.</p></div>
+      <div class="item"><span class="badge b-hybrid">VIEW PUBLIC · ACT GATED</span><p>Anyone can browse; the value action (open / play / submit) requires login.</p></div>
+      <div class="item"><span class="badge b-stage2">STAGE 2</span><p>Post-launch. Map it on the canvas as a dimmed/parked layer, not in the MVP build path.</p></div>
+    </div>
+    <div class="note"><b>Frame blocks:</b> &nbsp;<b>Functions</b> = components &amp; actions on the screen (• core, <span style="color:var(--muted-foreground)">○ optional/nice-to-have</span>). &nbsp;<b>States</b> = every visual condition the wireframe must cover (empty, loading, win, lose, etc.). &nbsp;<b>Modals</b> = overlays this screen can raise. &nbsp;<b>Connections</b> = where the user comes from (In) and goes to (Out).</div>
+  </section>
+
+  <!-- DIRECTION -->
+  <section id="direction">
+    <h2><span class="ix">01</span> Product &amp; design direction</h2>
+    <p class="lead">Anchored in the client's answers and the competitor research. Crowns is an <b>IRL physical-item</b> case platform (not CS2 skins, not RuneScape). The aesthetic target is the "quiet" end of the spectrum — packy.gg / packdraw calm, ★★☆☆☆ — sharp and smooth, never scammy.</p>
+    <div class="table-card"><table>
+      <tr><th>Decision area</th><th>Direction</th></tr>
+      <tr><td>Platform model</td><td>Real-world physical items. Won items go to inventory/cart → fulfilled by a human Crowns team via a <b>marketplace ticket</b> (no user-entered shipping at withdrawal).</td></tr>
+      <tr><td>Day-1 mechanics</td><td>Case openings (single + multi up to x4), demo spins, case battles, upgrader (Borrow mode up to <b>95%</b>), rewards (monthly race / weekly challenges / raffle / free cases by level).</td></tr>
+      <tr><td>Brand</td><td>Start fresh — drop the loud V1 purple. Pale or dark, restrained scheme. One accent; currency/results are the only other colors.</td></tr>
+      <tr><td>Auth</td><td>Email + Discord OAuth. Age gate 18+.</td></tr>
+      <tr><td>Cashier</td><td>Crypto + gift cards day 1. Apple Pay / fiat = Phase 2 (third party).</td></tr>
+      <tr><td>Profile</td><td>VIP tiers + affiliate dashboard important. Stats on request. Public <b>Win Showcase</b> reachable by clicking a username in chat/site.</td></tr>
+      <tr><td>Sound</td><td>A rain.gg × packdraw blend; original assets are Stage 2.</td></tr>
+    </table></div>
+    <h3>Visual language guardrails (from research)</h3>
+    <div class="table-card"><table>
+      <tr><th>Do</th><th>Avoid</th></tr>
+      <tr><td>Dark-first, ONE accent. Item photography carries the excitement.</td><td>Promo-banner stacks &amp; rotators above the fold.</td></tr>
+      <tr><td>Density adapts: low on home/opening, high on account tables.</td><td>Live-ticker overflow competing with chat + leaderboards.</td></tr>
+      <tr><td>Rarity glow = the one decoration system (grey/blue/purple/gold).</td><td>Badge inflation (SALE/HOT/NEW) on every card.</td></tr>
+      <tr><td>Trust surfaced passively — Provably Fair page + per-result links.</td><td>Forced-open chat + floating support widget (V1 problem).</td></tr>
+      <tr><td>Progressive disclosure on Upgrade (stake → dial → catalog).</td><td>Gradient + texture + neon layering all at once.</td></tr>
+    </table></div>
+    <div class="swatches">
+      <span class="sw"><i style="background:#7c5cff"></i>Accent (primary)</span>
+      <span class="sw"><i style="background:#f5c451"></i>Currency only</span>
+      <span class="sw"><i style="background:#43d17f"></i>Win result</span>
+      <span class="sw"><i style="background:#ff5d6c"></i>Lose result</span>
+      <span class="sw"><i style="background:#8b90a6"></i>Rarity grey</span>
+      <span class="sw"><i style="background:#4aa8ff"></i>Rarity blue</span>
+      <span class="sw"><i style="background:#a78bfa"></i>Rarity purple</span>
+      <span class="sw"><i style="background:#f5c451"></i>Rarity gold</span>
+    </div>
+    <p style="color:var(--muted-foreground);font-size:12.5px;margin-top:12px">Type recommendation from research: Space Grotesk (display) + Inter (body/data) — confirm against the V1 Figma when shared. Colors above are working placeholders for the product. This document is themed with the <b>COSS UI</b> preset (Base UI / Cal.com): opaque alpha borders + bottom shadows, neutral palette, Geist headings.</p>
+  </section>
+
+  <!-- GLOBAL SHELL -->
+  <section id="shell">
+    <h2><span class="ix">02</span> Global shell &amp; navigation</h2>
+    <p class="lead">Persistent chrome that wraps every route. On the canvas, draw this once as a "master frame" and reference it; on the wireframe it's a layout component.</p>
+    <div class="grid">
+      <div class="frame">
+        <div class="frame-head">
+          <div class="frame-title-row"><h4>App shell</h4></div>
+          <div class="frame-desc">Top bar, balance, collapsible chat, footer — present on every route.</div>
+          <div class="frame-action"><span class="badge b-route">PERSISTENT</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block">
+              <label>Top bar</label>
+              <ul class="fn">
+                <li>Logo → Home</li>
+                <li>Primary nav: Cases · Battles · Upgrade · Rewards · Marketplace · <b>Affiliates</b></li>
+                <li>Balance widget (gold currency) + <b>Deposit</b> CTA → Deposit modal</li>
+                <li>Logged-in: <b>Cart icon</b> (with item count) → Cart — holds won items to sell / deliver / set aside</li>
+                <li>Logged-out: <b>Sign In</b> / <b>Sign Up</b> buttons → Auth modals</li>
+                <li>Logged-in: avatar menu → Profile, Inventory, Wallet, Affiliates, Settings, Sign out</li>
+                <li>Level + XP mini-indicator → Profile</li>
+              </ul>
+            </div>
+            <div class="block">
+              <label>Chat &amp; utility</label>
+              <ul class="fn">
+                <li><b>Collapsible</b> live chat sidebar — hidden by default on opening &amp; (Stage 2) Originals screens</li>
+                <li>Clicking any username in chat → Public Showcase</li>
+                <li class="opt">Chat Rain entry point <span class="tag-s2">STAGE 2</span></li>
+                <li>Footer: Provably Fair, Terms, Privacy, AML, FAQ, Support</li>
+                <li>Support: passive link/overlay — never a forced floating widget</li>
+                <li>Age gate 18+ interstitial on first visit</li>
+              </ul>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label><span class="ico">↘</span>Raises modals</label><div class="flow">Auth (Sign in/up) · Deposit · Search · Support overlay</div></div>
+            <div class="block"><label><span class="ico">↗</span>Links to</label><div class="flow">Every route in the nav + footer legal/trust pages</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IA TREE -->
+  <section id="ia">
+    <h2><span class="ix">03</span> IA tree — canvas master map</h2>
+    <p class="lead">The full hierarchy. This is the skeleton to lay out first on FigJam; detailed flow arrows come from each screen's Connections block. Dashed = Stage 2.</p>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TD
+  ROOT["crowns.gg — shell: nav · balance · chat · footer"]
+  ROOT --> HOME["/ Home"]
+  ROOT --> AUTH(["Auth modals — Sign Up · Sign In"])
+
+  HOME --> CASES["/cases — Catalog"]
+  CASES --> CASE["/cases/[slug] — Detail + Opening"]
+  HOME --> BAT["/battles — Lobby"]
+  BAT --> BCREATE["/battles/create"]
+  BAT --> BROOM["/battles/[id] — Room"]
+  HOME --> UPG["/upgrade"]
+  HOME --> REW["/rewards"]
+  HOME --> AFF["/affiliates"]
+  ROOT --> MKT["/marketplace — buy · on sale · tickets"]
+  ROOT --> CART["/cart — won items: sell · deliver · set aside"]
+  ROOT --> FAIR["/provably-fair"]
+
+  CASE --> CART
+  UPG --> CART
+  BROOM --> CART
+  CART --> MKT
+  MKT --> INV2["/inventory (purchases)"]
+
+  ROOT --> ACC{{"Account"}}
+  ACC --> PROF["/profile + settings tabs"]
+  ACC --> INV["/inventory"]
+  ACC --> WAL["/wallet"]
+  INV --> CART
+  PROF --> SHOW["Public Win + Battle Showcase"]
+
+  ROOT --> LEGAL["/terms · /privacy · /aml"]
+
+  BROOM -.-> BCAST["Broadcast"]:::s2
+  BROOM -.-> BBEHIND["Bet Behind"]:::s2
+  ROOT -.-> RAIN["Chat Rain"]:::s2
+  BAT -.-> PRIV["Private Battles"]:::s2
+  ROOT -.-> ORIG["Originals — crash·mines·plinko·roulette·dice"]:::s2
+  ROOT -.-> PWA["Mobile PWA"]:::s2
+  WAL -.-> FIAT["Apple Pay / Fiat"]:::s2
+
+  classDef s2 stroke:#c2554d,stroke-dasharray:5 4,color:#e08a82,fill:#241a19;
+      </pre>
+    </div>
+  </section>
+
+  <!-- GATING MATRIX -->
+  <section id="gating">
+    <h2><span class="ix">04</span> Access &amp; gating matrix</h2>
+    <p class="lead">Single source of truth for what's public vs gated. Any gated action attempted while logged out raises the Auth modal, then resumes the action on success.</p>
+    <div class="table-card"><table>
+      <tr><th>Screen</th><th>View</th><th>Value action</th><th>Gate trigger</th></tr>
+      <tr><td>Home, Cases catalog, Case detail</td><td><span class="badge b-public">PUBLIC</span></td><td>Open case</td><td>Spin / buy → Auth + balance check</td></tr>
+      <tr><td>Battles lobby, Battle room</td><td><span class="badge b-public">PUBLIC</span></td><td>Join / create / spectate-bet</td><td>Join seat → Auth + balance</td></tr>
+      <tr><td>Provably Fair, Legal, Affiliates landing</td><td><span class="badge b-public">PUBLIC</span></td><td>—</td><td>—</td></tr>
+      <tr><td>Demo spin</td><td><span class="badge b-public">PUBLIC</span></td><td>Demo (no balance)</td><td>None — open to all</td></tr>
+      <tr><td>Upgrade, Rewards (claim), Marketplace (browse)</td><td><span class="badge b-hybrid">VIEW / ACT</span></td><td>Stake / claim / buy</td><td>Action → Auth + balance</td></tr>
+      <tr><td>Cart, Marketplace (On sale / Tickets), Profile, Inventory, Wallet, Settings, Affiliate dashboard</td><td><span class="badge b-gated">GATED</span></td><td>All</td><td>Route load / tab → Auth</td></tr>
+      <tr><td>Public Win Showcase</td><td><span class="badge b-public">PUBLIC</span></td><td>—</td><td>Read-only view of another user</td></tr>
+    </table></div>
+  </section>
+
+  <!-- ============ CORE SCREENS ============ -->
+  <section>
+    <h2><span class="ix">05</span> Core screens — full specification</h2>
+    <p class="lead">18 screen groups, ~25 unique frames. Each is a canvas node.</p>
+
+    <div class="grid">
+
+      <!-- 01 HOME -->
+      <div class="frame" id="s-home">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">01</span><h4>Home</h4><span class="route">/</span></div>
+          <div class="frame-desc">Low-density landing. Max 3 sections above the fold, no banner rotator. Sells the platform and routes users into the case loop fast.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Hero banner + 3 callouts: <b>Daily free case</b> · <b>Upgrader</b> · <b>Battles</b></li>
+                <li>New cases strip → Case detail</li>
+                <li>Battle highlights preview → Battles / room</li>
+                <li>"How it works" 3-step explainer</li>
+                <li>FAQ preview (accordion)</li>
+                <li>Single live-drops strip (in the shell, one row max)</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">logged-out</span><span class="state">logged-in</span><span class="state">loading skeleton</span><span class="state">live feed empty</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Sign Up</span><span class="state">Sign In</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Logo (any page) · external / ads · post-logout</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Cases · Case detail · Battles · Rewards · Auth modal</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 02 CASES -->
+      <div class="frame" id="s-cases">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">02</span><h4>Cases catalog</h4><span class="route">/cases</span></div>
+          <div class="frame-desc">Browseable grid of all cases. The core entry to the open loop. Clean cards with rarity glow, no badge stacking.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>4-col responsive case grid</li>
+                <li>Search</li>
+                <li>Filters: price · rarity · popularity · new</li>
+                <li>Sort control</li>
+                <li>Case card: art, name, price → Case detail</li>
+                <li class="opt">"Upgrader" promo / featured row</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">default grid</span><span class="state">filtered</span><span class="state">no results</span><span class="state">loading</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Nav · Home featured strip</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Case detail</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 03 CASE DETAIL -->
+      <div class="frame" id="s-case">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">03</span><h4>Case detail &amp; opening</h4><span class="route">/cases/[slug]</span></div>
+          <div class="frame-desc">The signature screen. View is public; opening requires login + balance (demo is open to all). Minimal density during the spin — single focal object, chat hidden.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">VIEW PUBLIC · OPEN GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Case hero: art, item count, total value</li>
+                <li>Drop-odds table + item grid (with rarity glow: grey/blue/purple/gold)</li>
+                <li><b>Single open</b></li>
+                <li><b>Multi-open</b> — x2 / x3 / x4</li>
+                <li><b>Demo spin</b> — no balance spent</li>
+                <li class="opt">Turbo mode — skip animation <small>(nice-to-have)</small></li>
+                <li><b>6-state opening animation</b> — rare-item sound cue then spin</li>
+                <li>Post-reveal: won items go <b>straight to the Cart</b> (no sell/keep step) — decide there: sell · deliver · set aside</li>
+                <li>Per-result Provably Fair verify link</li>
+              </ul>
+            </div>
+            <div class="block"><label>States — opening sequence</label>
+              <div class="states"><span class="state">idle / pre-open</span><span class="state">insufficient balance</span><span class="state">demo mode</span><span class="state">anticipation (sound)</span><span class="state">spin</span><span class="state">decel</span><span class="state win">reveal — win</span><span class="state">multi-result row</span><span class="state">added to cart toast</span></div>
+              <label style="margin-top:14px">Modals raised</label>
+              <div class="states"><span class="state">Auth (if logged out)</span><span class="state">Deposit (if low balance)</span><span class="state">Provably Fair verify</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Cases catalog · Home featured · battle case picker preview</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Cart (won items) · Deposit modal · Auth modal · Provably Fair · Open again (loop)</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 04 BATTLES LOBBY -->
+      <div class="frame" id="s-battles">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">04</span><h4>Battles lobby</h4><span class="route">/battles</span></div>
+          <div class="frame-desc">Real-time list of active battle rooms over WebSocket. Public to view; joining/creating is gated.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Active rooms list (live updating): seats, cases, total value, mode</li>
+                <li>Filter/sort: by value · seats · status (waiting/running)</li>
+                <li><b>Create Battle</b> CTA → /battles/create</li>
+                <li>Join open seat → Battle room</li>
+                <li>Watch → Battle room (spectator)</li>
+                <li class="opt">My battle history tab</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">rooms active</span><span class="state">empty lobby</span><span class="state">connecting (WS)</span><span class="state">reconnecting</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Nav · Home battles preview</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Create battle · Battle room (join/watch) · Auth modal</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 05 CREATE BATTLE -->
+      <div class="frame" id="s-bcreate">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">05</span><h4>Create battle</h4><span class="route">/battles/create</span></div>
+          <div class="frame-desc">Configurator for a new battle. Builds the room then drops creator into it.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Case picker — search + add multiple</li>
+                <li>Rounds selector</li>
+                <li>Player count — 1v1 up to <b>6-way</b> <small>(8-way = differentiator, TBD complexity)</small></li>
+                <li>Mode toggles: Crazy/Fast · <b>Borrow Mode (up to 95%)</b></li>
+                <li class="opt">Private / password <span class="tag-s2">STAGE 2</span></li>
+                <li class="opt">Broadcast toggle <span class="tag-s2">STAGE 2</span></li>
+                <li>Price summary + Confirm &amp; create</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">empty config</span><span class="state">cases added</span><span class="state">insufficient balance</span><span class="state">creating room</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Auth</span><span class="state">Deposit</span><span class="state">Case picker overlay</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Battles lobby (Create CTA)</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Battle room (newly created) · Deposit modal</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 06 BATTLE ROOM -->
+      <div class="frame" id="s-broom">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">06</span><h4>Battle room</h4><span class="route">/battles/[id]</span></div>
+          <div class="frame-desc">Live synchronized multi-player opening. Spectatable by anyone; seats require login + balance.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">WATCH PUBLIC · PLAY GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Synchronized reels — all players spin together</li>
+                <li>Round-by-round scoring + running total per player</li>
+                <li><b>Borrow Mode</b> indicator (up to 95%)</li>
+                <li>Live chat (room-scoped)</li>
+                <li><b>Spectator mode</b></li>
+                <li>Result → winnings to winner's inventory/cart</li>
+                <li class="opt">Broadcast voice/cam layer <span class="tag-s2">STAGE 2</span></li>
+                <li class="opt">Bet-behind on a player/bot <span class="tag-s2">STAGE 2</span></li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">waiting for players</span><span class="state">filling seats</span><span class="state">countdown</span><span class="state">spinning rounds</span><span class="state win">winner</span><span class="state lose">eliminated/lost</span><span class="state">spectator view</span><span class="state">disconnect/reconnect</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Lobby (join/watch) · Create battle · Home preview · chat announcement <span class="tag-s2">S2</span></div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Inventory (winnings) · back to Lobby · rematch/create · Provably Fair</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 07 UPGRADE -->
+      <div class="frame" id="s-upgrade">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">07</span><h4>Upgrade</h4><span class="route">/upgrade</span></div>
+          <div class="frame-desc">Stake-and-multiply mechanic (layout: stake on the left, radial game field on the right). Progressive disclosure — stake → multiplier → reward items. Items are won into the Cart, not straight to inventory.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">VIEW PUBLIC · PLAY GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li><b>Your stake</b> (left) — Balance amount input + presets (10/25/50/100% · Max), or stake inventory items</li>
+                <li><b>Multiplier</b> — x2 / x5 / x20 (sets win chance ≈ 1/mult)</li>
+                <li><b>Radial chance dial</b> (right) — arc + ticker + live win %</li>
+                <li><b>Reward-item catalog</b> below — Search · Price range · type/rarity · Sort; pick up to <b>4</b> target items</li>
+                <li><b>Fixed select-bar</b> — chosen items + total + "Add N items" / Cancel</li>
+                <li>Committed reward row + Upgrade button (state-aware CTA)</li>
+                <li>Win → reward items go to <b>Cart</b>; lose → stake consumed</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">idle</span><span class="state">stake set</span><span class="state">multiplier picked</span><span class="state">items selected (≤4)</span><span class="state">spinning dial</span><span class="state win">win → items to cart</span><span class="state lose">lose — stake gone</span><span class="state">sign-in / deposit prompts</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Auth</span><span class="state">Deposit</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Nav · Home callout · Inventory (stake item)</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Cart (winnings) · Deposit · play again</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 08 REWARDS -->
+      <div class="frame" id="s-rewards">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">08</span><h4>Rewards</h4><span class="route">/rewards</span></div>
+          <div class="frame-desc">The retention hub — marketing leans on rewards &amp; true VIP. Guests can browse via an intro popup, then see placeholders + sign-in prompts where personal data would be.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">VIEW PUBLIC · CLAIM GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li><b>Monthly Race</b> — banner (title · prize pool $15.9K · live countdown) + Top-10 leaderboard (you highlighted)</li>
+                <li><b>Weekly Challenge</b> — banner + this week's prize card + 3 gated challenges; complete all 3 → prize unlocked</li>
+                <li><b>Raffle</b> — banner (prize + countdown) · 1 ticket / $25 wagered · buy presets (1/5/10/25) + custom qty · previous winners table (tickets + prize)</li>
+                <li><b>Promo code</b> — redeem → reveals reward (item / case / balance) → Claim → "reward received"</li>
+                <li><b>Free Cases by Level</b> — continuous level ladder: claimed ✓ / claim / in-progress (XP to next) / locked</li>
+                <li><b>Ranking System (VIP)</b> — Bronze→Diamond tier carousel; separate track from Level (XP + wager/task thresholds), shown as VIP · tier on profile</li>
+                <li>FAQ accordion block</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">guest (intro popup + placeholders)</span><span class="state">claimable</span><span class="state">already claimed</span><span class="state">locked (level/req)</span><span class="state">countdown active</span><span class="state">challenge done/locked</span><span class="state">promo reveal → claimed</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Guest intro / Auth</span><span class="state">claim confirm</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Nav · Home teaser · level-up prompt · avatar menu</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Cart (claimed item) · Profile (level / VIP) · Auth</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 09 AFFILIATES -->
+      <div class="frame" id="s-aff">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">09</span><h4>Affiliates</h4><span class="route">/affiliates</span></div>
+          <div class="frame-desc">Important — streamers will be on the platform. Now in the primary nav. Public explainer + marketing for guests; full dashboard once signed in.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">LANDING PUBLIC · DASH GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>How it works — 4 steps + rev-share note (up to 15%)</li>
+                <li><b>Guest:</b> marketing copy + placeholder stats + Sign up / Sign in CTA</li>
+                <li><b>No code yet:</b> Create referral code</li>
+                <li><b>Code active:</b> your code · referral link · promo code for viewers · stats (clicks/signups/commission)</li>
+                <li>Code performance breakdown (7d / 30d / lifetime)</li>
+                <li>Request payout → Wallet/balance</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">guest (marketing + placeholders)</span><span class="state">no code yet</span><span class="state">code active</span><span class="state">earnings populated</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Auth</span><span class="state">create code</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Primary nav · footer · avatar menu · Profile tab</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Wallet (payouts) · Auth</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 10 MARKETPLACE -->
+      <div class="frame" id="s-market">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">10</span><h4>Marketplace (fulfilment)</h4><span class="route">/marketplace</span></div>
+          <div class="frame-desc">A player-to-player market + fulfilment hub. Buy items listed by other players (purchases go to inventory). Selling and delivery are driven from the main <b>Cart</b>; the marketplace cart is <b>buy-only</b>. Three tabs.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">BROWSE PUBLIC · MANAGE GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li><b>Browse catalog</b> (public) — listings from players; card shows name · price · image · rarity/drop · <b>owner</b> (→ their showcase). Filters: Search · type · price · rarity (drop) · Sort. Hover → Buy</li>
+                <li><b>Buy-cart</b> (sticky, browse only) — staged purchases → "Buy all" → confirm → debit balance → items go to <b>Inventory</b></li>
+                <li><b>On sale</b> tab (gated) — your active listings; Unlist → back to inventory; empty → "Go to inventory"</li>
+                <li><b>Tickets</b> tab (gated) — delivery orders: search + status filter, steps pending→processing→shipped, items (collapsible "show more"), name + address</li>
+                <li>Ticket submission (name + address) is raised from the <b>Cart</b> "To Delivery"</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">browse</span><span class="state">guest (tabs gated → auth)</span><span class="state">buy-cart staged</span><span class="state">purchase confirm</span><span class="state">on sale (listed)</span><span class="state">ticket pending</span><span class="state">processing</span><span class="state win">shipped</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Auth gate</span><span class="state">buy confirm</span><span class="state">address / ticket confirm</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Nav · Cart (Sell → appears in On sale + Browse) · Cart (To Delivery → Tickets)</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Inventory (purchases) · owner's Public Showcase · Deposit</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 10b CART -->
+      <div class="frame" id="s-cart">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">10b</span><h4>Cart</h4><span class="route">/cart</span></div>
+          <div class="frame-desc">The sell &amp; deliver hub. Every won/claimed item lands here first; the player decides its fate. Opened from the header cart icon. Distinct from the marketplace buy-cart.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Item grid of won/claimed items (rarity glow)</li>
+                <li>Per item: <b>To Inventory</b> (set aside) · <b>Sell to Market</b> (confirm → list as a lot)</li>
+                <li>Summary: <b>To Delivery (all)</b> → ticket (name + address) · <b>Sell all to Market</b> (confirm) · <b>Send all to Inventory</b></li>
+                <li>Sell confirmation wording adapts: single ("list [name]?") vs multiple ("list N items?")</li>
+                <li>Sold items → On sale tab + public Browse; delivery → Tickets</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">empty</span><span class="state">items present</span><span class="state">sell confirm (1 / N)</span><span class="state">delivery form</span><span class="state">moved to inventory</span><span class="state">listed</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Auth</span><span class="state">sell confirm</span><span class="state">delivery / ticket form</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Case / Battle / Upgrade / Rewards wins · header cart icon · Inventory (add)</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Marketplace (On sale listing) · Marketplace (Tickets) · Inventory</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 11 PROVABLY FAIR -->
+      <div class="frame" id="s-fair">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">11</span><h4>Provably Fair</h4><span class="route">/provably-fair</span></div>
+          <div class="frame-desc">Trust, surfaced passively — a real page plus per-result verify links. Never a popup interrupt.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>HMAC-SHA256 verifier tool</li>
+                <li>Per-result verify link (deep-link with seed/hash)</li>
+                <li>Explainer of the fairness model</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">info default</span><span class="state">verifying</span><span class="state win">verified ✓</span><span class="state lose">mismatch ✗</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Footer · per-result links from Case detail / Battle room</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> back to originating result</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 12 AUTH -->
+      <div class="frame" id="s-auth">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">12</span><h4>Auth</h4><span class="route">Sign Up · Sign In</span></div>
+          <div class="frame-desc">Overlays, not routes — returns the user to where they were and resumes any gated action that triggered them.</div>
+          <div class="frame-action"><span class="badge b-modal">MODALS</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Sign Up — email + <b>Discord OAuth</b></li>
+                <li>Sign In</li>
+                <li>Age gate 18+ confirmation</li>
+                <li class="opt">Promo/referral code capture on signup</li>
+                <li>Forgot password</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">sign up</span><span class="state">sign in</span><span class="state">OAuth redirect</span><span class="state">validation error</span><span class="state">age-gate block</span><span class="state win">success → resume action</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Any gated action · top-bar buttons</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> resume original action · Deposit (first-time prompt) · Home</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 13 PROFILE -->
+      <div class="frame" id="s-profile">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">13</span><h4>Profile &amp; settings</h4><span class="route">/profile</span></div>
+          <div class="frame-desc">Owner's account home with tabbed settings. Stats are always visible with a period toggle. Houses VIP tier and two configurable showcases the public version reads from.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Avatar + username + level + XP bar</li>
+                <li>VIP tier + progress (Bronze→Diamond)</li>
+                <li>Stats — always visible, period toggle (7d / 30d / lifetime)</li>
+                <li><b>Win showcase</b> — privacy toggle (Public on/off) + <b>Show all</b> / <b>Show selected</b> (tap items to choose)</li>
+                <li><b>Battle win showcase</b> — same controls, battle wins only</li>
+                <li>Settings tabs: <b>General</b> (email/username/Discord) · <b>Security</b> (password + 2FA) · <b>Self-exclusion</b></li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">overview</span><span class="state">stats period 7d/30d/life</span><span class="state">showcase public/hidden</span><span class="state">showcase all/selected</span><span class="state">tab: general</span><span class="state">tab: security (2FA)</span><span class="state">tab: self-exclusion</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Avatar menu · level indicator · Rewards (level / VIP)</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Inventory · Wallet · Affiliates · Public Showcase (preview) · Rewards</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 14 SHOWCASE -->
+      <div class="frame" id="s-showcase">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">14</span><h4>Public Win Showcase</h4><span class="route">/u/[username]</span></div>
+          <div class="frame-desc">Read-only public view of any user, reached by clicking a name in chat or anywhere on site. Reads the owner's two showcases and respects their privacy + selected-items settings.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Username + avatar + level/VIP badge</li>
+                <li><b>Largest wins</b> section (from owner's Win showcase)</li>
+                <li><b>Battle wins</b> section (from owner's Battle win showcase)</li>
+                <li>Honors owner controls: hidden → "private" note; selected → only chosen items</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">populated showcase</span><span class="state">selected-only</span><span class="state">private (hidden by owner)</span><span class="state">empty (no wins yet)</span><span class="state">own profile (this is you)</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Username click in chat · battle room · leaderboard</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> back to context · (own) Profile edit</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 15 INVENTORY -->
+      <div class="frame" id="s-inv">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">15</span><h4>Inventory</h4><span class="route">/inventory</span></div>
+          <div class="frame-desc">"Set-aside" storage: items the player chose to hold (from the Cart) plus marketplace purchases. The hand-off point back into the Cart for selling or delivery.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>Item grid (rarity glow) · filter by tier · sort by value/date</li>
+                <li>Per item: <b>To cart</b> (to sell or deliver) · <b>Details</b></li>
+                <li><b>Send all to cart</b> bulk action</li>
+                <li><b>Details</b> popup — image · market price · item value · rarity · drop chance · active listings · description · Add to cart</li>
+                <li class="opt">"Use in Upgrader" link</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">items present</span><span class="state">empty inventory</span><span class="state">filtered (tier)</span><span class="state">item detail open</span><span class="state">moving to cart</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Cart (set aside) · Marketplace (purchases) · avatar menu</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Cart (To cart) · Upgrade (stake item) · Item detail</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 16 WALLET -->
+      <div class="frame" id="s-wallet">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">16</span><h4>Wallet / Cashier</h4><span class="route">/wallet</span></div>
+          <div class="frame-desc">Money in, history, and the withdrawal entry that redirects to the marketplace (no direct shipping form here).</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li><b>Deposit</b> — crypto + gift cards</li>
+                <li class="opt">Apple Pay / fiat <span class="tag-s2">STAGE 2 (3rd party)</span></li>
+                <li><b>Withdraw</b> → redirect to Marketplace</li>
+                <li>Transaction history</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">deposit method select</span><span class="state">crypto address/QR</span><span class="state">gift card entry</span><span class="state">awaiting confirmation</span><span class="state win">deposit credited</span><span class="state">history list</span></div>
+              <label style="margin-top:14px">Modals</label>
+              <div class="states"><span class="state">Deposit (also globally raised)</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Top-bar Deposit · avatar menu · low-balance prompts · Affiliate payouts</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> Marketplace (withdraw) · resume the action that needed funds</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 17 LEGAL -->
+      <div class="frame" id="s-legal">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">17</span><h4>Legal &amp; compliance</h4><span class="route">/terms · /privacy · /aml</span></div>
+          <div class="frame-desc">Footer-linked static pages. Trust/legal scope owned by client side (elderbreaks) — placeholders on the canvas.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTES</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Functions</label>
+              <ul class="fn">
+                <li>/terms — Terms of service</li>
+                <li>/privacy — Privacy policy</li>
+                <li>/aml — AML policy</li>
+                <li>Self-exclusion / responsible gambling info (links to Profile tool)</li>
+              </ul>
+            </div>
+            <div class="block"><label>States</label>
+              <div class="states"><span class="state">static content</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ In</label><div class="flow">Footer · signup age gate</div></div>
+            <div class="block"><label>↗ Out</label><div class="flow"><span class="arrow">→</span> back · Self-exclusion (Profile)</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FLOWS ============ -->
+  <section>
+    <h2><span class="ix">06</span> Key user flows</h2>
+    <p class="lead">End-to-end journeys with decision points. These become the labelled arrow paths on the canvas.</p>
+
+    <h3 id="flow-onboard">A · Onboarding → first case open</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  A[Land on Home] --> B{Logged in?}
+  B -- No --> C[Click Open Case / Sign Up]
+  C --> D[[Auth modal\nEmail / Discord]]
+  D --> E{Age 18+?}
+  E -- No --> X[Blocked]
+  E -- Yes --> F[Account created]
+  B -- Yes --> F
+  F --> G[Browse /cases]
+  G --> H[Case detail]
+  H --> I{Balance enough?}
+  I -- No --> J[[Deposit modal\ncrypto / gift card]]
+  J --> K
+  I -- Yes --> K[Open case · 6-state anim]
+  H --> DEMO[Demo spin\nno balance] --> H
+  K --> L[Item to Inventory/Cart]
+  L --> M[Send to Marketplace]
+    </pre></div>
+
+    <h3 id="flow-open">B · Case opening loop (states)</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  S0[Idle] --> CHK{Demo or paid?}
+  CHK -- Demo --> AN
+  CHK -- Paid --> BAL{Balance?}
+  BAL -- low --> DEP[[Deposit]] --> AN
+  BAL -- ok --> AN[Anticipation + rare sound]
+  AN --> SP[Spin] --> DEC[Decelerate] --> RV[Reveal]
+  RV --> MULTI{Multi x2/x3/x4?}
+  MULTI -- yes --> ROW[Result row] --> OUT
+  MULTI -- no --> OUT[Item to Inventory]
+  RV --> VF[Verify · Provably Fair]
+  OUT --> AGAIN[Open again] --> S0
+    </pre></div>
+
+    <h3 id="flow-battle">C · Battle loop</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  L[/battles lobby/] --> CH{Join or Create?}
+  CH -- Create --> CR[/battles/create\ncases · rounds · seats 1v1-6way · Borrow 95%/]
+  CR --> RM[Battle room]
+  CH -- Join --> SEAT{Balance?}
+  SEAT -- low --> DEP[[Deposit]] --> RM
+  SEAT -- ok --> RM
+  L -- Watch --> SPEC[Spectator]
+  RM --> WAIT[Wait for players] --> CNT[Countdown] --> SPIN[Sync rounds]
+  SPIN --> RES{Outcome}
+  RES -- Win --> WIN[Winnings to Inventory]
+  RES -- Lose --> BACK[Back to lobby]
+  SPEC -.bet behind.-> S2[(Stage 2 payout)]
+    </pre></div>
+
+    <h3 id="flow-cashout">D · Win → marketplace → physical shipment</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  W[Win item\ncase/battle/upgrade] --> INV[/inventory/]
+  INV --> SEND[Send to marketplace]
+  INV -.-> UPG[Upgrade item] -.-> INV
+  SEND --> CART[Marketplace cart]
+  CART --> TK[[Ticket: name + address + item]]
+  TK --> P[Status: Pending]
+  P --> PR[Processing\nCrowns team orders]
+  PR --> SH[Shipped]
+    </pre></div>
+
+    <h3 id="flow-deposit">E · Deposit (raised from anywhere)</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  T[Low balance / Deposit CTA] --> M[[Deposit modal]]
+  M --> MET{Method}
+  MET -- Crypto --> QR[Address / QR] --> CONF[Await confirmations]
+  MET -- Gift card --> GC[Enter code] --> CONF
+  MET -. Apple Pay/Fiat .-> S2[(Stage 2 · 3rd party)]
+  CONF --> CR[Balance credited] --> RES[Resume original action]
+    </pre></div>
+  </section>
+
+  <!-- ============ STAGE 2 ============ -->
+  <section id="stage2">
+    <h2><span class="ix">07</span> Stage 2 — post-launch layer</h2>
+    <p class="lead">Park these on the canvas as a separate dimmed region connected by dashed lines. Build path is MVP-first; these extend existing screens rather than replace them.</p>
+    <div class="grid">
+      <div class="frame">
+        <div class="frame-head">
+          <div class="frame-title-row"><h4>Post-launch features</h4></div>
+          <div class="frame-desc">Extensions and new surfaces deferred to Phase 2.</div>
+          <div class="frame-action"><span class="badge b-stage2">STAGE 2</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Extends Battle room</label>
+              <ul class="fn">
+                <li class="opt"><b>Broadcast Mode</b> — toggle on creation → chat announcement → voice or cam+voice (WebRTC) → spectator interaction layer</li>
+                <li class="opt"><b>Bet Behind</b> — spectators bet on a player/bot; 1v1 → x2, 1v1v1 → x3, etc.; real-time payout on outcome</li>
+                <li class="opt"><b>Private Battles</b> — password-protected rooms (for streamers)</li>
+              </ul>
+            </div>
+            <div class="block"><label>New surfaces</label>
+              <ul class="fn">
+                <li class="opt"><b>Chat Rain</b> — players trigger coin rain in site chat</li>
+                <li class="opt"><b>Originals games</b> — /crash · /mines · /plinko · /roulette · /dice</li>
+                <li class="opt"><b>Mobile PWA</b> — installable, push notifications, portrait layouts</li>
+                <li class="opt"><b>Apple Pay + fiat deposits</b> — 3rd-party provider</li>
+                <li class="opt"><b>Full sound production</b> — original audio (rain × packdraw blend)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note s2"><b>Out of scope:</b> No Pack Builder, no Steam trade offers, no gift cases (explicitly excluded by client). Turbo mode optional. 8-way battles are a stretch differentiator pending complexity assessment.</div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CANVAS NOTES ============ -->
+  <section id="canvas">
+    <h2><span class="ix">08</span> Canvas build notes (FigJam → Figma)</h2>
+    <p class="lead">How to translate this spec onto the canvas before wireframing.</p>
+    <div class="table-card"><table>
+      <tr><th>Step</th><th>What to place</th></tr>
+      <tr><td>1 · Skeleton</td><td>Drop the §03 IA tree as the backbone. One frame per numbered screen card.</td></tr>
+      <tr><td>2 · Zones</td><td>Group by lane: Public/Discovery · Play loop · Account · Cashier/Fulfilment · Trust/Legal · Stage 2 (dimmed).</td></tr>
+      <tr><td>3 · Node content</td><td>Inside each frame, list the screen's Functions + States as stickies. Mark access with the colored badge convention from §00.</td></tr>
+      <tr><td>4 · Arrows</td><td>Draw connections from each card's In/Out block. Use the §06 flow diagrams to label the main paths (A–E).</td></tr>
+      <tr><td>5 · Modals</td><td>Render modals as smaller attached nodes (Auth, Deposit, Provably Fair, Case picker, Address/Ticket) — they overlay, not navigate.</td></tr>
+      <tr><td>6 · Gating</td><td>Overlay the §04 matrix as a legend; put a lock icon on gated frames and a half-lock on view-public/act-gated frames.</td></tr>
+      <tr><td>7 · Wireframe</td><td>Once approved, each frame becomes a low-fi wireframe; the States list defines the screens/variants to draw.</td></tr>
+    </table></div>
+    <div class="note"><b>Reference build:</b> the previous project followed this same node→wireframe principle — <a href="https://casewhale-wireframe.vercel.app/" target="_blank">casewhale-wireframe.vercel.app</a>. Mirror that fidelity for the V2 wireframe pass.</div>
+  </section>
+
+  <div class="foot">
+    Crowns.gg × Tresor.tech · Site Map &amp; User Flow Specification · Prepared June 2026 · Themed with COSS UI (Base UI / Cal.com preset) · Sources: 02_Platform_Architecture_Reference, 07_Competitor_Research_Master, Crowns.gg Sitemap (client) + client Q&amp;A. Working color/type values are placeholders pending the fresh V2 brand &amp; V1 Figma.
+  </div>
+</main>
+</div>
+
+<script>
+mermaid.initialize({
+  startOnLoad:true,
+  theme:'base',
+  themeVariables:{
+    background:'#161616',
+    primaryColor:'#1c1c1c',
+    primaryBorderColor:'#343434',
+    primaryTextColor:'#ededed',
+    secondaryColor:'#1a1a1a',
+    tertiaryColor:'#1a1a1a',
+    lineColor:'#5e5e5e',
+    edgeLabelBackground:'#161616',
+    clusterBkg:'#1a1a1a',
+    clusterBorder:'#343434',
+    fontFamily:'Geist, Inter, sans-serif',
+    fontSize:'13px'
+  },
+  flowchart:{curve:'basis',nodeSpacing:42,rankSpacing:54,padding:10}
+});
+</script>
+
+<!-- Legend panel + badge tooltips -->
+<button id="legendHandle" class="legend-handle" aria-label="Open legend"><span class="lh-ico">‹</span> Legend</button>
+<aside class="legend-panel" aria-label="Legend">
+  <div class="lp-head"><b>Legend — how to read</b><button id="lpClose" class="lp-close" aria-label="Close">✕</button></div>
+  <div class="lp-body">
+    <div class="lp-item"><span class="badge b-route">ROUTE</span><p>A real URL/page the user can land on or deep-link to.</p></div>
+    <div class="lp-item"><span class="badge b-modal">MODAL</span><p>An overlay on top of the current page — no URL change. Returns user to where they were.</p></div>
+    <div class="lp-item"><span class="badge b-public">PUBLIC</span><p>Viewable without an account. Drives SEO &amp; first impression.</p></div>
+    <div class="lp-item"><span class="badge b-gated">GATED</span><p>Requires login. Any action here triggers the Auth modal if logged out.</p></div>
+    <div class="lp-item"><span class="badge b-hybrid">VIEW PUBLIC · ACT GATED</span><p>Anyone can browse; the value action (open / play / submit) requires login.</p></div>
+    <div class="lp-item"><span class="badge b-stage2">STAGE 2</span><p>Post-launch. Map it on the canvas as a dimmed/parked layer, not in the MVP build path.</p></div>
+    <div class="note" style="margin-top:12px"><b>Frame blocks:</b> <b>Functions</b> = components &amp; actions (• core, ○ optional). <b>States</b> = every visual condition the wireframe must cover. <b>Modals</b> = overlays this screen can raise. <b>Connections</b> = where the user comes from (In) and goes to (Out).</div>
+  </div>
+</aside>
+
+<script>
+(function(){
+  var byText={"PERSISTENT":"PERSISTENT — chrome present on every route (top bar, nav, chat, footer)."};
+  var byClass={
+    "b-route":"ROUTE — a real URL/page the user can land on or deep-link to.",
+    "b-modal":"MODAL — an overlay on the current page; no URL change. Returns the user to where they were.",
+    "b-public":"PUBLIC — viewable without an account. Drives SEO and first impression.",
+    "b-gated":"GATED — requires login. Any action here triggers the Auth modal if logged out.",
+    "b-hybrid":"VIEW PUBLIC · ACT GATED — anyone can browse; the value action (open / play / submit) requires login.",
+    "b-stage2":"STAGE 2 — post-launch. Parked layer on the canvas, not in the MVP build path."
+  };
+  var tip=document.createElement("div"); tip.className="tipbox"; document.body.appendChild(tip);
+  function show(el){
+    var t=byText[el.textContent.trim()];
+    if(!t){var c=Object.keys(byClass).filter(function(k){return el.classList.contains(k);})[0]; if(c)t=byClass[c];}
+    if(!t)return;
+    tip.textContent=t; tip.style.opacity="1";
+    var r=el.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight;
+    var left=r.left, top=r.bottom+8;
+    if(left+tw>window.innerWidth-12)left=window.innerWidth-12-tw;
+    if(top+th>window.innerHeight-12)top=r.top-8-th;
+    tip.style.left=Math.max(12,left)+"px"; tip.style.top=Math.max(12,top)+"px";
+  }
+  function hide(){tip.style.opacity="0";}
+  Array.prototype.forEach.call(document.querySelectorAll(".badge"),function(b){
+    b.classList.add("has-tip");
+    b.addEventListener("mouseenter",function(){show(b);});
+    b.addEventListener("mouseleave",hide);
+  });
+  var body=document.body;
+  document.getElementById("legendHandle").addEventListener("click",function(){body.classList.toggle("legend-open");});
+  document.getElementById("lpClose").addEventListener("click",function(){body.classList.remove("legend-open");});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")body.classList.remove("legend-open");});
+})();
+</script>
+</body>
+</html>

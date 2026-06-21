@@ -1,0 +1,1200 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crowns — Карта сайту та User Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+/* COSS UI — Base UI / Cal.com style preset. Opaque (alpha) borders + bottom shadows for depth. */
+:root{
+  --radius:0.625rem;
+  --white:#ffffff;
+  --n50:#fafafa;--n100:#f5f5f5;--n200:#e5e5e5;--n400:#a3a3a3;--n500:#737373;--n800:#262626;--n950:#0a0a0a;
+  --background:color-mix(in srgb,var(--n950) 95%,var(--white));
+  --foreground:var(--n100);
+  --card:color-mix(in srgb,var(--background) 98%,var(--white));
+  --popover:color-mix(in srgb,var(--background) 95%,var(--white));
+  --primary:var(--n100);
+  --primary-foreground:var(--n800);
+  --secondary:rgb(255 255 255 / 4%);
+  --secondary-foreground:var(--n100);
+  --muted:rgb(255 255 255 / 4%);
+  --muted-foreground:color-mix(in srgb,var(--n500) 86%,var(--white));
+  --accent:rgb(255 255 255 / 6%);
+  --border:rgb(255 255 255 / 7%);
+  --border-strong:rgb(255 255 255 / 12%);
+  --input:rgb(255 255 255 / 8%);
+  --ring:var(--n500);
+  --destructive:#ef4444;--destructive-foreground:#f87171;
+  --info:#3b82f6;--info-foreground:#60a5fa;
+  --success:#10b981;--success-foreground:#34d399;
+  --warning:#f59e0b;--warning-foreground:#fbbf24;
+  --sidebar:color-mix(in srgb,var(--n950) 97%,var(--white));
+  --sidebar-foreground:color-mix(in srgb,var(--n100) 64%,var(--sidebar));
+  --sidebar-border:rgb(255 255 255 / 5%);
+  --shadow-xs:0 1px 2px 0 rgb(0 0 0 / 0.30);
+  --shadow-sm:0 1px 2px 0 rgb(0 0 0 / 0.34),0 2px 6px -2px rgb(0 0 0 / 0.28);
+  --shadow-badge:0 1px 1px 0 rgb(0 0 0 / 0.18);
+  --font-sans:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-heading:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --font-mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--background);color:var(--foreground);font-family:var(--font-sans);font-size:15px;line-height:1.6;letter-spacing:-0.006em;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border-strong)}
+.wrap{display:grid;grid-template-columns:256px 1fr;max-width:1440px;margin:0 auto}
+.side{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;border-right:1px solid var(--sidebar-border);padding:22px 14px 56px;background:var(--sidebar)}
+.main{padding:48px 56px 120px;min-width:0}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--sidebar-border)}.main{padding:32px 22px 80px}}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 4px}
+.mark{width:28px;height:28px;border-radius:8px;border:1px solid var(--border-strong);background:var(--card);display:grid;place-items:center;font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--foreground);box-shadow:var(--shadow-xs)}
+.brand b{font-size:13.5px;font-weight:600;font-family:var(--font-heading);letter-spacing:-.01em}
+.brand span{display:block;font-size:11.5px;color:var(--muted-foreground);font-weight:400}
+.side h4{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);margin:22px 8px 6px;font-weight:500}
+.side nav a{display:block;padding:5px 8px;border-radius:7px;color:var(--sidebar-foreground);font-size:13px;line-height:1.45}
+.side nav a:hover{background:var(--accent);color:var(--foreground);text-decoration:none}
+.side nav a.sub{padding-left:14px;font-size:12.5px}
+.hero{padding-bottom:30px;border-bottom:1px solid var(--border);margin-bottom:42px}
+.hero .kicker{font-size:12.5px;color:var(--muted-foreground);font-family:var(--font-mono);letter-spacing:-.01em}
+.hero h1{margin:14px 0 12px;font-family:var(--font-heading);font-size:34px;line-height:1.12;font-weight:600;letter-spacing:-.028em}
+.hero p{margin:0;color:var(--muted-foreground);max-width:700px;font-size:15.5px}
+.meta-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
+.pill{font-size:12px;padding:3px 10px;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);color:var(--muted-foreground);background:var(--card);box-shadow:var(--shadow-xs)}
+section{margin:54px 0;scroll-margin-top:18px}
+h2{font-family:var(--font-heading);font-size:22px;letter-spacing:-.022em;font-weight:600;margin:0 0 6px;display:flex;align-items:center;gap:11px}
+h2 .ix{font-size:11px;color:var(--muted-foreground);font-family:var(--font-mono);border:1px solid var(--border);border-radius:6px;padding:2px 7px;font-weight:500;background:var(--card);box-shadow:var(--shadow-xs)}
+.lead{color:var(--muted-foreground);margin:0 0 26px;max-width:780px}
+h3{font-family:var(--font-heading);font-size:15px;font-weight:600;letter-spacing:-.01em;margin:36px 0 14px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:1px 8px;border-radius:calc(var(--radius) - 3px);border:1px solid transparent;line-height:1.5;white-space:nowrap;box-shadow:var(--shadow-badge)}
+.b-route{background:var(--card);color:var(--muted-foreground);border-color:var(--border-strong)}
+.b-modal{background:var(--primary);color:var(--primary-foreground);border-color:transparent}
+.b-public{background:color-mix(in srgb,var(--success) 14%,transparent);color:var(--success-foreground);border-color:color-mix(in srgb,var(--success) 30%,transparent)}
+.b-gated{background:color-mix(in srgb,var(--warning) 14%,transparent);color:var(--warning-foreground);border-color:color-mix(in srgb,var(--warning) 30%,transparent)}
+.b-hybrid{background:color-mix(in srgb,var(--info) 14%,transparent);color:var(--info-foreground);border-color:color-mix(in srgb,var(--info) 30%,transparent)}
+.b-stage2{background:color-mix(in srgb,var(--destructive) 14%,transparent);color:var(--destructive-foreground);border-color:color-mix(in srgb,var(--destructive) 30%,transparent)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.legend .item{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.legend .item p{margin:9px 0 0;font-size:12.5px;color:var(--muted-foreground)}
+.grid{display:flex;flex-direction:column;gap:28px}
+.frame{scroll-margin-top:18px}
+.frame-head{display:grid;grid-template-columns:1fr auto;gap:5px 16px;padding:0 4px 12px}
+.frame-title-row{grid-column:1;grid-row:1;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.frame-title-row .num{font-family:var(--font-mono);font-size:12px;color:var(--muted-foreground)}
+.frame-title-row h4{margin:0;font-family:var(--font-heading);font-size:16px;font-weight:600;letter-spacing:-.012em}
+.frame-title-row .route{font-family:var(--font-mono);font-size:12px;color:var(--foreground);background:var(--muted);padding:2px 7px;border-radius:6px;border:1px solid var(--border)}
+.frame-desc{grid-column:1;grid-row:2;color:var(--muted-foreground);font-size:13.5px;max-width:760px}
+.frame-action{grid-column:2;grid-row:1 / span 2;align-self:center;justify-self:end;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+.panel-body{padding:20px 22px}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:760px){.col2{grid-template-columns:1fr}.frame-head{grid-template-columns:1fr}.frame-action{grid-column:1;grid-row:auto;justify-self:start;margin-top:2px}}
+.block label{display:block;font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);font-weight:500;margin-bottom:10px}
+.fn{list-style:none;margin:0;padding:0}
+.fn li{position:relative;padding:3px 0 3px 16px;font-size:13.5px;color:var(--foreground)}
+.fn li::before{content:"";position:absolute;left:1px;top:11px;width:4px;height:4px;border-radius:1px;background:var(--muted-foreground)}
+.fn li.opt{color:var(--muted-foreground)}
+.fn li.opt::before{background:var(--border-strong)}
+.fn small{color:var(--muted-foreground)}
+.states{display:flex;flex-wrap:wrap;gap:6px}
+.state{font-size:11.5px;font-family:var(--font-mono);padding:2px 8px;border-radius:6px;background:var(--card);border:1px solid var(--border);color:var(--muted-foreground);box-shadow:var(--shadow-xs)}
+.state.win{border-color:color-mix(in srgb,var(--success) 34%,transparent);color:var(--success-foreground)}
+.state.lose{border-color:color-mix(in srgb,var(--destructive) 34%,transparent);color:var(--destructive-foreground)}
+.conns{margin-top:18px;border-top:1px solid var(--border);padding-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:760px){.conns{grid-template-columns:1fr}}
+.conns .flow{font-size:13px;color:var(--muted-foreground)}
+.conns .flow .arrow{color:var(--foreground);font-weight:600}
+.conns label .ico{margin-right:5px;color:var(--muted-foreground)}
+.table-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--card);margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted-foreground);font-weight:500;background:rgb(255 255 255 / 2.5%)}
+td{color:var(--muted-foreground)}
+td:first-child{color:var(--foreground)}
+tbody tr:last-child td,table tr:last-child td{border-bottom:none}
+tbody tr:hover td,table tr:hover td{background:rgb(255 255 255 / 2.5%)}
+.diagram{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:24px;margin:16px 0 0;overflow-x:auto;box-shadow:var(--shadow-sm)}
+.mermaid{display:flex;justify-content:center}
+.note{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:14px 16px;margin:16px 0;font-size:13.5px;color:var(--muted-foreground);box-shadow:var(--shadow-xs)}
+.note b{color:var(--foreground);font-weight:600}
+.note.s2{border-color:color-mix(in srgb,var(--destructive) 24%,var(--border))}
+.note.s2 b{color:var(--destructive-foreground)}
+.swatches{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.sw{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted-foreground)}
+.sw i{width:20px;height:20px;border-radius:6px;display:block;border:1px solid var(--border-strong)}
+.foot{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted-foreground);font-size:12.5px}
+.tag-s2{font-size:10px;font-weight:500;color:var(--destructive-foreground);border:1px solid color-mix(in srgb,var(--destructive) 30%,transparent);border-radius:5px;padding:1px 6px;vertical-align:middle;margin-left:8px;font-family:var(--font-mono)}
+.badge.has-tip{cursor:help}
+.tipbox{position:fixed;z-index:90;max-width:280px;background:var(--popover);border:1px solid var(--border-strong);color:var(--foreground);font-size:12px;line-height:1.45;padding:9px 11px;border-radius:calc(var(--radius) - 2px);box-shadow:var(--shadow-sm);opacity:0;pointer-events:none;transition:opacity .12s ease;letter-spacing:0;text-transform:none;font-weight:400}
+.legend-handle{position:fixed;right:0;top:148px;z-index:60;display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border-strong);border-right:none;border-radius:8px 0 0 8px;color:var(--foreground);font-family:var(--font-sans);font-size:12.5px;font-weight:500;padding:10px 13px;cursor:pointer;box-shadow:var(--shadow-sm);transition:background .12s,opacity .18s}
+.legend-handle:hover{background:var(--accent)}
+.legend-handle .lh-ico{font-size:14px;line-height:1;color:var(--muted-foreground)}
+body.legend-open .legend-handle{opacity:0;pointer-events:none}
+.legend-panel{position:fixed;top:0;right:0;height:100vh;width:344px;max-width:88vw;background:var(--popover);border-left:1px solid var(--border);z-index:70;transform:translateX(100%);transition:transform .24s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-16px 0 48px rgb(0 0 0 / 0.5)}
+body.legend-open .legend-panel{transform:translateX(0)}
+.lp-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--popover)}
+.lp-head b{font-family:var(--font-heading);font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.lp-close{display:grid;place-items:center;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted-foreground);cursor:pointer;font-size:13px}
+.lp-close:hover{background:var(--accent);color:var(--foreground)}
+.lp-body{padding:16px 16px 40px}
+.lp-item{border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow-xs)}
+.lp-item p{margin:8px 0 0;font-size:12.5px;color:var(--muted-foreground)}
+@media(max-width:560px){.legend-panel{width:300px}}
+</style>
+</head>
+<body>
+<div style="position:fixed;top:14px;right:16px;z-index:300;display:flex;gap:3px;background:rgba(18,19,23,.92);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:3px;backdrop-filter:blur(6px);font-family:ui-monospace,Menlo,monospace;font-size:12px;font-weight:600">
+  <a href="Crowns_V2_SiteMap_Spec_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#cfd1d6">ENG</a>
+  <a href="Crowns_V2_SiteMap_Spec_UA_COSS.html" style="padding:6px 11px;border-radius:7px;text-decoration:none;color:#0e0f12;background:#fff">UKR</a>
+</div>
+<div class="wrap">
+
+<aside class="side">
+  <div class="brand" style="flex-direction:column;align-items:flex-start;gap:8px">
+    <svg viewBox="0 0 207 36" width="150" height="26" style="display:block" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Crowns">
+      <path d="M141.621 5.10963H142.302C150.096 5.10963 157.894 5.10963 165.695 5.10963C165.893 5.09398 166.093 5.1285 166.274 5.21002C166.456 5.29154 166.614 5.41742 166.734 5.57602C170.004 9.54554 171.979 14.1473 173.123 19.1273C174.199 24.1039 174.677 29.1906 174.547 34.2799V35.9537H162.154V35.2956C162.21 30.8467 161.897 26.401 161.219 22.0034C160.262 16.36 158.417 11.0795 154.799 6.52954C154.57 6.24452 154.331 5.96469 153.993 5.5553V35.9693H141.621V5.10963Z" fill="white"/>
+      <path d="M92.4446 35.9999H70.1594C66.4841 35.9999 64.2645 34.3883 63.1104 30.8903C62.0708 27.8121 62.0084 24.6407 62.1539 21.4433C62.3983 16.0642 63.4379 10.7784 64.6179 5.52894C64.6959 5.18692 64.8363 5.104 65.1378 5.104C72.6026 5.104 80.0622 5.104 87.527 5.104C90.8175 5.104 93.006 6.88666 94.0716 10.2343C94.7947 12.7386 95.1158 15.3411 95.0229 17.9453C94.997 22.8425 94.2016 27.6463 93.2087 32.419C92.9904 33.6109 92.7149 34.7821 92.4446 35.9999ZM77.1355 5.56521C77.0887 5.72068 77.0575 5.81396 77.0367 5.90723C76.3454 9.64356 75.5656 13.3643 74.9938 17.1214C74.3668 20.7453 74.3054 24.4441 74.8119 28.0868C75.0281 29.9298 75.657 31.7008 76.6521 33.2689C77.0186 33.8659 77.5078 34.3787 78.0875 34.7735C78.6672 35.1683 79.3243 35.4361 80.0154 35.5594C80.0695 35.419 80.1146 35.2754 80.1505 35.1293C80.8211 31.5277 81.5801 27.9831 82.1519 24.3556C82.7632 20.8085 82.856 17.1919 82.4274 13.6183C82.2338 11.5825 81.5701 9.61907 80.4884 7.88163C80.1235 7.28293 79.6364 6.76736 79.0588 6.36831C78.4812 5.96927 77.826 5.69566 77.1355 5.56521Z" fill="white"/>
+      <path d="M177.042 5.10946H199.8C201.346 5.02937 202.881 5.41585 204.203 6.21844C204.972 6.737 205.606 7.4303 206.054 8.24118C206.501 9.05207 206.749 9.95733 206.776 10.8824C206.969 13.3957 206.937 15.9194 207 18.4846H194.524V17.7591C194.482 15.3131 194.461 12.8671 194.394 10.4212C194.359 9.85977 194.256 9.30466 194.087 8.76805C193.437 6.51382 191.81 5.41521 189.409 5.60177C189.385 5.7285 189.369 5.85658 189.362 5.98525C189.362 8.79915 189.362 11.6182 189.362 14.4321C189.371 15.0908 189.446 15.747 189.585 16.391C190.079 18.7488 191.514 20.0807 193.916 20.2517C195.777 20.3812 197.653 20.3139 199.519 20.3812C200.452 20.3879 201.382 20.4868 202.295 20.6766C204.894 21.2985 206.454 23.1433 206.776 25.8587C206.86 26.6696 206.9 27.4844 206.896 28.2995C206.896 30.844 206.896 33.3832 206.896 35.9639C206.667 35.9639 206.48 35.9639 206.293 35.9639H183.42C181.611 35.9639 179.937 35.596 178.627 34.2279C177.641 33.2068 177.058 31.8654 176.985 30.4501C176.834 27.859 176.834 25.268 176.771 22.6147H189.247C189.247 22.8635 189.247 23.0915 189.247 23.3195C189.279 25.8639 189.299 28.4083 189.362 30.9476C189.386 31.4764 189.482 31.9994 189.648 32.5022C190.266 34.6217 192.065 35.7255 194.467 35.4768C194.483 35.3686 194.493 35.2596 194.498 35.1503C194.498 32.3157 194.539 29.4811 194.472 26.6464C194.445 25.6383 194.27 24.6396 193.952 23.6822C193.24 21.6094 191.509 20.8372 189.481 20.7284C187.303 20.6144 185.12 20.687 182.937 20.6041C182.16 20.5715 181.391 20.4284 180.655 20.1791C179.598 19.8477 178.675 19.1884 178.02 18.2972C177.365 17.406 177.014 16.3296 177.016 15.225C176.927 11.9188 177.042 8.53486 177.042 5.10946Z" fill="white"/>
+      <path d="M33.0431 5.1097V14.8677H20.6763V5.70046L20.5463 5.64346C20.12 6.10467 19.6834 6.55551 19.2727 7.03227C16.1277 10.6598 13.7989 14.7588 12.7956 19.5057C11.9327 23.5633 12.2238 27.5017 14.2095 31.2173C15.2492 33.1761 16.7151 34.7256 18.966 35.3216C19.4858 35.4563 20.0057 35.4926 20.6503 35.591V26.1388H33.0119V35.9849H32.3673C24.5958 35.9849 16.8243 35.9382 9.04761 35.9849C5.64271 35.9849 3.36065 34.4302 1.84274 31.549C0.412652 28.7395 -0.204732 25.5886 0.059711 22.4491C0.418395 16.4378 2.97077 11.3801 6.84352 6.90272C7.36336 6.30159 7.82601 5.52427 8.49659 5.20816C9.16718 4.89205 9.98331 5.12006 10.7423 5.12006H33.0431V5.1097Z" fill="white"/>
+      <path d="M36.2773 5.14062H48.6546V17.5259L48.8677 17.5829C48.956 17.419 49.0241 17.245 49.0704 17.0647C49.5972 13.1988 50.117 9.33297 50.6299 5.4671C50.6472 5.36366 50.6715 5.2615 50.7027 5.16135H61.3229C60.7199 9.43662 60.1169 13.6911 59.5087 17.9923H48.6442V35.9692H36.2773V5.14062Z" fill="white"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M117.926 0L111.699 5.14586H124.097L117.926 0ZM108.663 5.14062H96.4727C97.7099 15.4254 98.9471 25.6999 100.184 35.964H112.286C112.153 34.7695 112.023 33.5854 111.893 32.4013C111.764 31.2172 111.634 30.033 111.501 28.8385H124.398C124.147 30.9073 123.903 32.9452 123.657 35.0023C123.618 35.3257 123.579 35.6497 123.54 35.9743H135.621C136.851 25.7137 138.089 15.4358 139.333 5.14062H127.231C127.11 6.16923 126.99 7.18456 126.869 8.19989C126.839 8.45314 126.809 8.7064 126.779 8.95986C126.29 13.0848 125.798 17.2098 125.303 21.3348C125.039 23.5286 124.772 25.7241 124.502 27.9213C124.459 28.0774 124.397 28.2272 124.315 28.367L124.107 28.31V5.18208H111.704V28.0508C111.711 28.1076 111.711 28.1651 111.704 28.2219C111.688 28.2556 111.665 28.2856 111.636 28.31C111.619 28.3163 111.601 28.3163 111.584 28.31C111.532 28.3168 111.48 28.3168 111.428 28.31C110.506 20.6024 109.585 12.8793 108.663 5.14062Z" fill="url(#paint0_linear_1_335)"/>
+      <mask id="mask0_1_335" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="96" y="0" width="44" height="36">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M117.926 0L111.699 5.14586H124.097L117.926 0ZM108.663 5.14062H96.4727C97.7099 15.4254 98.9471 25.6999 100.184 35.964H112.286C112.153 34.7695 112.023 33.5854 111.893 32.4013C111.764 31.2172 111.634 30.033 111.501 28.8385H124.398C124.147 30.9073 123.903 32.9452 123.657 35.0023C123.618 35.3257 123.579 35.6497 123.54 35.9743H135.621C136.851 25.7137 138.089 15.4358 139.333 5.14062H127.231C127.11 6.16923 126.99 7.18456 126.869 8.19989C126.839 8.45314 126.809 8.7064 126.779 8.95986C126.29 13.0848 125.798 17.2098 125.303 21.3348C125.039 23.5286 124.772 25.7241 124.502 27.9213C124.459 28.0774 124.397 28.2272 124.315 28.367L124.107 28.31V5.18208H111.704V28.0508C111.711 28.1076 111.711 28.1651 111.704 28.2219C111.688 28.2556 111.665 28.2856 111.636 28.31C111.619 28.3163 111.601 28.3163 111.584 28.31C111.532 28.3168 111.48 28.3168 111.428 28.31C110.506 20.6024 109.585 12.8793 108.663 5.14062Z" fill="url(#paint1_linear_1_335)"/>
+      </mask>
+      <g mask="url(#mask0_1_335)">
+      <g filter="url(#filter0_f_1_335)">
+      <path d="M141 13L97 16.9286L99 24L141 18.1071V13Z" fill="white" fill-opacity="0.78"/>
+      </g>
+      </g>
+      <path d="M122.688 23.3938V18.0049L118 15.3105L113.312 18.0049V23.3938L118 26.0881L122.688 23.3938Z" fill="#9F30AD"/>
+      <path d="M120.738 22.2731V19.1256L118 17.5518L115.262 19.1256V22.2731L118 23.8469L120.738 22.2731Z" fill="#C13AD8"/>
+      <path d="M118 17.5517V15.3105L122.688 18.0049L120.738 19.1256L118 17.5517Z" fill="#B138C6"/>
+      <path d="M120.738 22.2731V19.1256L122.688 18.0049V23.3938L120.738 22.2731Z" fill="#9733AF"/>
+      <path d="M118 23.8471V26.0882L122.688 23.3939L120.738 22.2732L118 23.8471Z" fill="#862F9B"/>
+      <path d="M115.262 22.2732L113.312 23.3939L118 26.0882V23.8471L115.262 22.2732Z" fill="#9733AF"/>
+      <path d="M114.182 18.0049L116.131 19.1256V22.2731L114.182 23.3938V18.0049Z" fill="#B138C6"/>
+      <path d="M118 17.5517L115.262 19.1256L113.312 18.0049L118 15.3105V17.5517Z" fill="#CA44EA"/>
+      <path d="M122.688 18.0049C121.999 18.3558 121.31 18.7065 120.62 19.0572L118.093 17.6047L118.001 15.3105L117.908 17.6047L115.381 19.0572C114.691 18.7065 114.002 18.3558 113.312 18.0049L115.262 19.1256V20.2439C115.299 19.8943 115.335 19.5447 115.372 19.1951C116.248 18.7208 117.124 18.2465 118.001 17.7723C118.877 18.2465 119.753 18.7208 120.629 19.1951C120.665 19.5447 120.702 19.8943 120.739 20.2439V19.1256L120.765 19.1105L122.688 18.0049Z" fill="#FDB4FF"/>
+      <path d="M118 15C117.946 15 117.892 15.0137 117.844 15.0415L113.156 17.7358C113.059 17.7915 113 17.894 113 18.0049V23.3938C113 23.5048 113.059 23.6072 113.156 23.6627L117.844 26.3573C117.892 26.385 117.946 26.3987 118 26.3987C118.054 26.3987 118.108 26.385 118.156 26.3573L122.844 23.6627C122.941 23.6072 123 23.5048 123 23.3938V18.0049C123 17.894 122.941 17.7915 122.844 17.7358L118.156 15.0415C118.108 15.0137 118.054 15 118 15ZM118 15.3106L122.688 18.0049V23.3938L118 26.0881L113.312 23.3938V18.0049L118 15.3106Z" fill="#DEAF34"/>
+      <g filter="url(#filter1_f_1_335)">
+      <path d="M121.676 13.2753L123.869 16.3437L127.627 16.6757L124.558 18.8694L124.226 22.6267L122.033 19.5583L118.275 19.2263L121.344 17.0325L121.676 13.2753Z" fill="white"/>
+      </g>
+      <defs>
+      <filter id="filter0_f_1_335" x="92" y="8" width="54" height="21" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="2.5" result="effect1_foregroundBlur_1_335"/></filter>
+      <filter id="filter1_f_1_335" x="117.075" y="12.0751" width="11.7516" height="11.7516" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="0.6" result="effect1_foregroundBlur_1_335"/></filter>
+      <linearGradient id="paint0_linear_1_335" x1="108.5" y1="36" x2="109.175" y2="17.302" gradientUnits="userSpaceOnUse"><stop stop-color="#DDA411"/><stop offset="1" stop-color="#FFDA7C"/></linearGradient>
+      <linearGradient id="paint1_linear_1_335" x1="108.5" y1="36" x2="109.175" y2="17.302" gradientUnits="userSpaceOnUse"><stop stop-color="#DDA411"/><stop offset="1" stop-color="#FFDA7C"/></linearGradient>
+      </defs>
+    </svg>
+    <div><span>Карта сайту та Flow</span></div>
+  </div>
+  <h4>Документ</h4>
+  <nav>
+    <a href="#read">Як читати цей документ</a>
+    <a href="#direction">Продукт і напрям дизайну</a>
+    <a href="#shell">Глобальна оболонка та навігація</a>
+    <a href="#ia">Дерево IA (майстер для канвасу)</a>
+    <a href="#gating">Матриця доступу та гейтингу</a>
+  </nav>
+  <h4>Основні екрани (MVP)</h4>
+  <nav>
+    <a class="sub" href="#s-home">01 · Головна /</a>
+    <a class="sub" href="#s-cases">02 · Кейси /cases</a>
+    <a class="sub" href="#s-case">03 · Деталі кейса /cases/[slug]</a>
+    <a class="sub" href="#s-battles">04 · Лобі баттлів /battles</a>
+    <a class="sub" href="#s-bcreate">05 · Створення баттлу</a>
+    <a class="sub" href="#s-broom">06 · Кімната баттлу /battles/[id]</a>
+    <a class="sub" href="#s-upgrade">07 · Апгрейдер /upgrade</a>
+    <a class="sub" href="#s-rewards">08 · Нагороди /rewards</a>
+    <a class="sub" href="#s-aff">09 · Афіліати /affiliates</a>
+    <a class="sub" href="#s-market">10 · Маркетплейс /marketplace</a>
+    <a class="sub" href="#s-cart">10b · Кошик /cart</a>
+    <a class="sub" href="#s-fair">11 · Provably Fair</a>
+    <a class="sub" href="#s-auth">12 · Авторизація (модалки)</a>
+    <a class="sub" href="#s-profile">13 · Профіль /profile</a>
+    <a class="sub" href="#s-showcase">14 · Публічна вітрина</a>
+    <a class="sub" href="#s-inv">15 · Інвентар /inventory</a>
+    <a class="sub" href="#s-wallet">16 · Гаманець /wallet</a>
+    <a class="sub" href="#s-legal">17 · Юридичні сторінки</a>
+  </nav>
+  <h4>Флоу</h4>
+  <nav>
+    <a href="#flow-onboard">Онбординг → перше відкриття</a>
+    <a href="#flow-open">Цикл відкриття кейса</a>
+    <a href="#flow-battle">Цикл баттлу</a>
+    <a href="#flow-cashout">Виграш → маркетплейс → доставка</a>
+    <a href="#flow-deposit">Депозит</a>
+  </nav>
+  <h4>Stage 2</h4>
+  <nav>
+    <a href="#stage2">Шар після запуску</a>
+  </nav>
+  <h4>Передача</h4>
+  <nav>
+    <a href="#canvas">Нотатки для канвасу</a>
+  </nav>
+</aside>
+
+<main class="main">
+  <div class="hero">
+    <div class="kicker">Crowns.gg × Tresor.tech · Червень 2026 · COSS UI</div>
+    <h1>Crowns — Карта сайту та специфікація User Flow</h1>
+    <p>Повний план для канвасу FigJam та інтерактивного wireframe, який створюватимемо далі. Кожен екран нижче описано з його призначенням, компонентами й функціями, рівнем доступу, інтерактивними станами, модалками та всіма вхідними/вихідними зв'язками — тож кожна картка відповідає 1:1 вузлу, який ви розміщуєте на канвасі.</p>
+    <div class="meta-row">
+      <span class="pill">Реальні (IRL) фізичні предмети</span>
+      <span class="pill">~24 екрани MVP</span>
+      <span class="pill">Шар Stage 2 позначено</span>
+      <span class="pill">Авторизація: Email + Discord OAuth</span>
+      <span class="pill">Каса: крипта + подарункові картки</span>
+      <span class="pill">Виведення = тікет маркетплейсу</span>
+    </div>
+  </div>
+
+  <!-- HOW TO READ -->
+  <section id="read">
+    <h2><span class="ix">00</span> Як читати цей документ</h2>
+    <p class="lead">Кожен фрейм екрана містить набір бейджів і чотири блоки контенту. На канвасі сприймайте кожен фрейм як один вузол/групу стікерів; кожен зв'язок — як стрілку між фреймами.</p>
+    <div class="legend">
+      <div class="item"><span class="badge b-route">ROUTE</span><p>Реальний URL/сторінка, на яку користувач може потрапити або задіп-лінкуватись.</p></div>
+      <div class="item"><span class="badge b-modal">MODAL</span><p>Оверлей поверх поточної сторінки — без зміни URL. Повертає користувача туди, де він був.</p></div>
+      <div class="item"><span class="badge b-public">PUBLIC</span><p>Доступно без акаунта. Працює на SEO та перше враження.</p></div>
+      <div class="item"><span class="badge b-gated">GATED</span><p>Потребує входу. Будь-яка дія тут викликає модалку авторизації, якщо користувач не залогінений.</p></div>
+      <div class="item"><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · ДІЯ GATED</span><p>Переглядати може будь-хто; цільова дія (відкрити / грати / надіслати) потребує входу.</p></div>
+      <div class="item"><span class="badge b-stage2">STAGE 2</span><p>Після запуску. На канвасі розміщуйте як притлумлений/відкладений шар, поза шляхом збірки MVP.</p></div>
+    </div>
+    <div class="note"><b>Блоки фрейму:</b> &nbsp;<b>Функції</b> = компоненти й дії на екрані (• основні, <span style="color:var(--muted-foreground)">○ опційні/бажані</span>). &nbsp;<b>Стани</b> = кожен візуальний стан, який має покрити wireframe (порожній, завантаження, виграш, програш тощо). &nbsp;<b>Модалки</b> = оверлеї, які цей екран може викликати. &nbsp;<b>Зв'язки</b> = звідки користувач приходить (Вхід) і куди йде (Вихід).</div>
+  </section>
+
+  <!-- DIRECTION -->
+  <section id="direction">
+    <h2><span class="ix">01</span> Продукт і напрям дизайну</h2>
+    <p class="lead">Базується на відповідях клієнта та конкурентному дослідженні. Crowns — це платформа кейсів із <b>реальними фізичними предметами</b> (не CS2-скіни, не предмети RuneScape). Естетична ціль — «тиха» частина спектра (спокій packy.gg / packdraw, ★★☆☆☆) — чітко й гладко, без відчуття скаму.</p>
+    <div class="table-card"><table>
+      <tr><th>Сфера рішення</th><th>Напрям</th></tr>
+      <tr><td>Модель платформи</td><td>Реальні фізичні предмети. Виграні предмети йдуть в інвентар/кошик → виконання вручну командою Crowns через <b>тікет маркетплейсу</b> (без введення адреси доставки на етапі виведення).</td></tr>
+      <tr><td>Механіки Day-1</td><td>Відкриття кейсів (одиночне + мульти до x4), демо-спіни, кейс-баттли, апгрейдер (Borrow mode до <b>95%</b>), нагороди (місячна гонка / тижневі челенджі / розіграш / безкоштовні кейси за рівнем).</td></tr>
+      <tr><td>Бренд</td><td>З нуля — відмова від гучного фіолетового V1. Бліда або темна, стримана схема. Один акцент; валюта/результати — єдині інші кольори.</td></tr>
+      <tr><td>Авторизація</td><td>Email + Discord OAuth. Age gate 18+.</td></tr>
+      <tr><td>Каса</td><td>Крипта + подарункові картки з 1 дня. Apple Pay / фіат = Phase 2 (третя сторона).</td></tr>
+      <tr><td>Профіль</td><td>VIP-рівні + дашборд афіліатів важливі. Статистика — на запит. Публічна <b>Вітрина виграшів</b>, доступна за кліком на нікнейм у чаті/на сайті.</td></tr>
+      <tr><td>Звук</td><td>Мікс rain.gg × packdraw; оригінальні ассети — Stage 2.</td></tr>
+    </table></div>
+    <h3>Гайдрейли візуальної мови (з дослідження)</h3>
+    <div class="table-card"><table>
+      <tr><th>Робити</th><th>Уникати</th></tr>
+      <tr><td>Темна основа, ОДИН акцент. Фотографія предметів несе емоцію.</td><td>Стеки/ротатори промо-банерів над фолдом.</td></tr>
+      <tr><td>Щільність адаптивна: низька на головній/відкритті, висока в таблицях акаунта.</td><td>Перевантаження live-тікерами поряд із чатом + лідербордами.</td></tr>
+      <tr><td>Світіння рідкості (rarity glow) = єдина система декору (сірий/синій/фіолетовий/золотий).</td><td>Інфляція бейджів (SALE/HOT/NEW) на кожній картці.</td></tr>
+      <tr><td>Довіра подається пасивно — сторінка Provably Fair + лінки на перевірку результату.</td><td>Примусово відкритий чат + плаваючий віджет підтримки (проблема V1).</td></tr>
+      <tr><td>Прогресивне розкриття на Апгрейдері (ставка → шкала → каталог).</td><td>Накладання градієнтів + текстур + неону одночасно.</td></tr>
+    </table></div>
+    <div class="swatches">
+      <span class="sw"><i style="background:#7c5cff"></i>Акцент (основний)</span>
+      <span class="sw"><i style="background:#f5c451"></i>Лише валюта</span>
+      <span class="sw"><i style="background:#43d17f"></i>Результат: виграш</span>
+      <span class="sw"><i style="background:#ff5d6c"></i>Результат: програш</span>
+      <span class="sw"><i style="background:#8b90a6"></i>Рідкість: сіра</span>
+      <span class="sw"><i style="background:#4aa8ff"></i>Рідкість: синя</span>
+      <span class="sw"><i style="background:#a78bfa"></i>Рідкість: фіолетова</span>
+      <span class="sw"><i style="background:#f5c451"></i>Рідкість: золота</span>
+    </div>
+    <p style="color:var(--muted-foreground);font-size:12.5px;margin-top:12px">Рекомендація щодо шрифтів із дослідження: Space Grotesk (заголовки) + Inter (текст/дані) — підтвердити за V1 Figma. Кольори вище — робочі плейсхолдери для продукту. Сам цей документ оформлено за пресетом <b>COSS UI</b> (Base UI / Cal.com): непрозорі alpha-бордери + нижні тіні, нейтральна палітра, заголовки Geist.</p>
+  </section>
+
+  <!-- GLOBAL SHELL -->
+  <section id="shell">
+    <h2><span class="ix">02</span> Глобальна оболонка та навігація</h2>
+    <p class="lead">Постійний каркас, що обгортає кожен маршрут. На канвасі намалюйте його один раз як «майстер-фрейм» і посилайтесь на нього; у wireframe це layout-компонент.</p>
+    <div class="grid">
+      <div class="frame">
+        <div class="frame-head">
+          <div class="frame-title-row"><h4>Оболонка застосунку</h4></div>
+          <div class="frame-desc">Верхня панель, баланс, згортуваний чат, футер — присутні на кожному маршруті.</div>
+          <div class="frame-action"><span class="badge b-route">ПОСТІЙНА</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block">
+              <label>Верхня панель</label>
+              <ul class="fn">
+                <li>Логотип → Головна</li>
+                <li>Основна навігація: Кейси · Баттли · Апгрейд · Нагороди · Маркетплейс · <b>Афіліати</b></li>
+                <li>Віджет балансу (золота валюта) + CTA <b>Депозит</b> → модалка депозиту</li>
+                <li>Залогінений: <b>іконка кошика</b> (з лічильником) → Кошик — тримає виграні предмети для продажу / доставки / відкладення</li>
+                <li>Без входу: кнопки <b>Увійти</b> / <b>Реєстрація</b> → модалки авторизації</li>
+                <li>Залогінений: меню аватара → Профіль, Інвентар, Гаманець, Афіліати, Налаштування, Вийти</li>
+                <li>Міні-індикатор рівня + XP → Профіль</li>
+              </ul>
+            </div>
+            <div class="block">
+              <label>Чат і утиліти</label>
+              <ul class="fn">
+                <li><b>Згортуваний</b> сайдбар живого чату — прихований за замовчуванням на екранах відкриття та (Stage 2) Originals</li>
+                <li>Клік на будь-який нікнейм у чаті → Публічна вітрина</li>
+                <li class="opt">Точка входу Chat Rain <span class="tag-s2">STAGE 2</span></li>
+                <li>Футер: Provably Fair, Terms, Privacy, AML, FAQ, Підтримка</li>
+                <li>Підтримка: пасивне посилання/оверлей — без примусового плаваючого віджета</li>
+                <li>Age gate 18+ інтерстишал при першому візиті</li>
+              </ul>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label><span class="ico">↘</span>Викликає модалки</label><div class="flow">Авторизація (Увійти/Реєстрація) · Депозит · Пошук · Оверлей підтримки</div></div>
+            <div class="block"><label><span class="ico">↗</span>Веде до</label><div class="flow">Кожен маршрут у навігації + юридичні/трастові сторінки у футері</div></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IA TREE -->
+  <section id="ia">
+    <h2><span class="ix">03</span> Дерево IA — майстер-карта для канвасу</h2>
+    <p class="lead">Повна ієрархія. Це скелет, який варто викласти першим у FigJam; детальні стрілки флоу беруться з блоку Зв'язки кожного екрана. Пунктир = Stage 2.</p>
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TD
+  ROOT["crowns.gg — оболонка: навігація · баланс · чат · футер"]
+  ROOT --> HOME["/ Головна"]
+  ROOT --> AUTH(["Модалки авторизації — Реєстрація · Вхід"])
+
+  HOME --> CASES["/cases — Каталог"]
+  CASES --> CASE["/cases/[slug] — Деталі + Відкриття"]
+  HOME --> BAT["/battles — Лобі"]
+  BAT --> BCREATE["/battles/create"]
+  BAT --> BROOM["/battles/[id] — Кімната"]
+  HOME --> UPG["/upgrade"]
+  HOME --> REW["/rewards"]
+  HOME --> AFF["/affiliates"]
+  ROOT --> MKT["/marketplace — купівля · на продажу · тікети"]
+  ROOT --> CART["/cart — виграні: продати · доставка · відкласти"]
+  ROOT --> FAIR["/provably-fair"]
+
+  CASE --> CART
+  UPG --> CART
+  BROOM --> CART
+  CART --> MKT
+  MKT --> INV2["/inventory (покупки)"]
+
+  ROOT --> ACC{{"Акаунт"}}
+  ACC --> PROF["/profile + вкладки налаштувань"]
+  ACC --> INV["/inventory"]
+  ACC --> WAL["/wallet"]
+  INV --> CART
+  PROF --> SHOW["Публічна вітрина виграшів + баттлів"]
+
+  ROOT --> LEGAL["/terms · /privacy · /aml"]
+
+  BROOM -.-> BCAST["Трансляція"]:::s2
+  BROOM -.-> BBEHIND["Ставка за гравцем"]:::s2
+  ROOT -.-> RAIN["Chat Rain"]:::s2
+  BAT -.-> PRIV["Приватні баттли"]:::s2
+  ROOT -.-> ORIG["Originals — crash·mines·plinko·roulette·dice"]:::s2
+  ROOT -.-> PWA["Мобільна PWA"]:::s2
+  WAL -.-> FIAT["Apple Pay / Фіат"]:::s2
+
+  classDef s2 stroke:#c2554d,stroke-dasharray:5 4,color:#e08a82,fill:#241a19;
+      </pre>
+    </div>
+  </section>
+
+  <!-- GATING MATRIX -->
+  <section id="gating">
+    <h2><span class="ix">04</span> Матриця доступу та гейтингу</h2>
+    <p class="lead">Єдине джерело правди щодо того, що публічне, а що під логіном. Будь-яка gated-дія, спроба якої відбувається без входу, викликає модалку авторизації, а потім продовжує дію після успіху.</p>
+    <div class="table-card"><table>
+      <tr><th>Екран</th><th>Перегляд</th><th>Цільова дія</th><th>Тригер гейту</th></tr>
+      <tr><td>Головна, Каталог кейсів, Деталі кейса</td><td><span class="badge b-public">PUBLIC</span></td><td>Відкрити кейс</td><td>Спін / купівля → авторизація + перевірка балансу</td></tr>
+      <tr><td>Лобі баттлів, Кімната баттлу</td><td><span class="badge b-public">PUBLIC</span></td><td>Приєднатись / створити / ставка-за-гравцем</td><td>Зайняти місце → авторизація + баланс</td></tr>
+      <tr><td>Provably Fair, Юридичні, Лендинг афіліатів</td><td><span class="badge b-public">PUBLIC</span></td><td>—</td><td>—</td></tr>
+      <tr><td>Демо-спін</td><td><span class="badge b-public">PUBLIC</span></td><td>Демо (без балансу)</td><td>Немає — відкрито всім</td></tr>
+      <tr><td>Апгрейд, Нагороди (клейм), Маркетплейс (browse)</td><td><span class="badge b-hybrid">ПЕРЕГЛЯД / ДІЯ</span></td><td>Ставка / клейм / купівля</td><td>Дія → авторизація + баланс</td></tr>
+      <tr><td>Кошик, Маркетплейс (On sale / Tickets), Профіль, Інвентар, Гаманець, Налаштування, Дашборд афіліата</td><td><span class="badge b-gated">GATED</span></td><td>Усі</td><td>Завантаження маршруту / вкладки → авторизація</td></tr>
+      <tr><td>Публічна вітрина виграшів</td><td><span class="badge b-public">PUBLIC</span></td><td>—</td><td>Перегляд іншого користувача лише для читання</td></tr>
+    </table></div>
+  </section>
+
+  <!-- ============ CORE SCREENS ============ -->
+  <section>
+    <h2><span class="ix">05</span> Основні екрани — повна специфікація</h2>
+    <p class="lead">18 груп екранів, ~25 унікальних фреймів. Кожен — вузол на канвасі.</p>
+
+    <div class="grid">
+
+      <!-- 01 HOME -->
+      <div class="frame" id="s-home">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">01</span><h4>Головна</h4><span class="route">/</span></div>
+          <div class="frame-desc">Лендинг низької щільності. Максимум 3 секції над фолдом, без ротатора банерів. Продає платформу й швидко веде користувача в цикл кейсів.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Hero-банер + 3 заклики: <b>Щоденний безкоштовний кейс</b> · <b>Апгрейдер</b> · <b>Баттли</b></li>
+                <li>Стрічка нових кейсів → Деталі кейса</li>
+                <li>Прев'ю баттлів (highlights) → Баттли / кімната</li>
+                <li>Пояснення "Як це працює" (3 кроки)</li>
+                <li>Прев'ю FAQ (акордеон)</li>
+                <li>Одна стрічка live-дропів (в оболонці, макс. один рядок)</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">без входу</span><span class="state">залогінений</span><span class="state">скелет завантаження</span><span class="state">порожній live-фід</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Реєстрація</span><span class="state">Вхід</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Логотип (будь-яка сторінка) · зовнішні / реклама · після виходу</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кейси · Деталі кейса · Баттли · Нагороди · Модалка авторизації</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 02 CASES -->
+      <div class="frame" id="s-cases">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">02</span><h4>Каталог кейсів</h4><span class="route">/cases</span></div>
+          <div class="frame-desc">Переглядова сітка всіх кейсів. Основний вхід у цикл відкриття. Чисті картки з rarity glow, без стеків бейджів.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Адаптивна сітка кейсів (4 колонки)</li>
+                <li>Пошук</li>
+                <li>Фільтри: ціна · рідкість · популярність · нові</li>
+                <li>Сортування</li>
+                <li>Картка кейса: арт, назва, ціна → Деталі кейса</li>
+                <li class="opt">Секція «Upgrader» / стрічка обраного</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">сітка за замовч.</span><span class="state">відфільтровано</span><span class="state">немає результатів</span><span class="state">завантаження</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Навігація · стрічка обраного на Головній</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Деталі кейса</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 03 CASE DETAIL -->
+      <div class="frame" id="s-case">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">03</span><h4>Деталі кейса та відкриття</h4><span class="route">/cases/[slug]</span></div>
+          <div class="frame-desc">Знаковий екран. Перегляд публічний; відкриття потребує входу + балансу (демо доступне всім). Мінімальна щільність під час спіну — один фокусний об'єкт, чат прихований.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · ВІДКРИТТЯ GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Hero кейса: арт, кількість предметів, загальна вартість</li>
+                <li>Таблиця шансів дропу + сітка предметів (rarity glow: сірий/синій/фіолетовий/золотий)</li>
+                <li><b>Одиночне відкриття</b></li>
+                <li><b>Мульти-відкриття</b> — x2 / x3 / x4</li>
+                <li><b>Демо-спін</b> — без витрати балансу</li>
+                <li class="opt">Turbo mode — пропуск анімації <small>(бажане)</small></li>
+                <li><b>6-стейтова анімація відкриття</b> — звуковий cue для рідкого предмета, потім спін</li>
+                <li>Після ревілу: виграні предмети йдуть <b>прямо в Кошик</b> (без кроку продати/лишити) — рішення там: продати · доставка · відкласти</li>
+                <li>Лінк перевірки Provably Fair для кожного результату</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани — послідовність відкриття</label>
+              <div class="states"><span class="state">очікування / до відкриття</span><span class="state">недостатньо балансу</span><span class="state">демо-режим</span><span class="state">антисипація (звук)</span><span class="state">спін</span><span class="state">сповільнення</span><span class="state win">ревіл — виграш</span><span class="state">рядок мульти-результату</span><span class="state">тост «додано в кошик»</span></div>
+              <label style="margin-top:14px">Викликані модалки</label>
+              <div class="states"><span class="state">Авторизація (якщо без входу)</span><span class="state">Депозит (якщо мало балансу)</span><span class="state">Перевірка Provably Fair</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Каталог кейсів · обране на Головній · прев'ю в case picker баттлу</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кошик (виграні предмети) · Модалка депозиту · Модалка авторизації · Provably Fair · Відкрити ще (цикл)</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 04 BATTLES LOBBY -->
+      <div class="frame" id="s-battles">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">04</span><h4>Лобі баттлів</h4><span class="route">/battles</span></div>
+          <div class="frame-desc">Список активних кімнат баттлів у реальному часі через WebSocket. Перегляд публічний; приєднання/створення — gated.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Список активних кімнат (live-оновлення): місця, кейси, загальна вартість, режим</li>
+                <li>Фільтр/сортування: за вартістю · місцями · статусом (очікує/триває)</li>
+                <li>CTA <b>Створити баттл</b> → /battles/create</li>
+                <li>Зайняти вільне місце → Кімната баттлу</li>
+                <li>Дивитись → Кімната баттлу (спектатор)</li>
+                <li class="opt">Вкладка моєї історії баттлів</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">кімнати активні</span><span class="state">порожнє лобі</span><span class="state">підключення (WS)</span><span class="state">перепідключення</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Навігація · прев'ю баттлів на Головній</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Створити баттл · Кімната баттлу (приєднатись/дивитись) · Модалка авторизації</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 05 CREATE BATTLE -->
+      <div class="frame" id="s-bcreate">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">05</span><h4>Створення баттлу</h4><span class="route">/battles/create</span></div>
+          <div class="frame-desc">Конфігуратор нового баттлу. Створює кімнату й переносить творця всередину.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Case picker — пошук + додавання кількох</li>
+                <li>Селектор раундів</li>
+                <li>Кількість гравців — від 1v1 до <b>6 учасників</b> <small>(8-way = диференціатор, складність TBD)</small></li>
+                <li>Перемикачі режиму: Crazy/Fast · <b>Borrow Mode (до 95%)</b></li>
+                <li class="opt">Приватний / пароль <span class="tag-s2">STAGE 2</span></li>
+                <li class="opt">Перемикач трансляції <span class="tag-s2">STAGE 2</span></li>
+                <li>Підсумок ціни + Підтвердити та створити</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">порожня конфігурація</span><span class="state">кейси додано</span><span class="state">недостатньо балансу</span><span class="state">створення кімнати</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Авторизація</span><span class="state">Депозит</span><span class="state">Оверлей case picker</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Лобі баттлів (CTA Створити)</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кімната баттлу (щойно створена) · Модалка депозиту</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 06 BATTLE ROOM -->
+      <div class="frame" id="s-broom">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">06</span><h4>Кімната баттлу</h4><span class="route">/battles/[id]</span></div>
+          <div class="frame-desc">Живе синхронне мульти-плеєрне відкриття. Дивитись може будь-хто; місця потребують входу + балансу.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · ГРА GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Синхронні барабани — усі гравці спінять одночасно</li>
+                <li>Підрахунок за раундами + поточна сума на гравця</li>
+                <li>Індикатор <b>Borrow Mode</b> (до 95%)</li>
+                <li>Живий чат (у межах кімнати)</li>
+                <li><b>Режим спектатора</b></li>
+                <li>Результат → виграш у інвентар/кошик переможця</li>
+                <li class="opt">Шар трансляції голос/камера <span class="tag-s2">STAGE 2</span></li>
+                <li class="opt">Ставка за гравцем/ботом <span class="tag-s2">STAGE 2</span></li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">очікування гравців</span><span class="state">заповнення місць</span><span class="state">зворотний відлік</span><span class="state">спін раундів</span><span class="state win">переможець</span><span class="state lose">вибув/програв</span><span class="state">вид спектатора</span><span class="state">розрив/перепідключення</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Лобі (приєднатись/дивитись) · Створення баттлу · прев'ю на Головній · анонс у чаті <span class="tag-s2">S2</span></div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кошик (виграш) · назад у Лобі · реванш/створити · Provably Fair</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 07 UPGRADE -->
+      <div class="frame" id="s-upgrade">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">07</span><h4>Апгрейдер</h4><span class="route">/upgrade</span></div>
+          <div class="frame-desc">Механіка «ставка-і-множник» (розкладка: ставка ліворуч, радіальне ігрове поле праворуч). Прогресивне розкриття — ставка → множник → предмети-винагороди. Виграш потрапляє в Кошик, не одразу в інвентар.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · ГРА GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li><b>Ваша ставка</b> (ліворуч) — сума балансу + пресети (10/25/50/100% · Макс), або ставка предметами з інвентаря</li>
+                <li><b>Множник</b> — x2 / x5 / x20 (задає шанс ≈ 1/множник)</li>
+                <li><b>Радіальна шкала шансу</b> (праворуч) — дуга + тікер + живий % виграшу</li>
+                <li><b>Каталог предметів-винагород</b> знизу — Пошук · діапазон ціни · тип/рідкість · Сортування; до <b>4</b> цільових предметів</li>
+                <li><b>Закріплена панель вибору</b> — обрані + сума + «Додати N предметів» / Скасувати</li>
+                <li>Виграш → предмети йдуть у <b>Кошик</b>; програш → ставку списано</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">очікування</span><span class="state">ставку задано</span><span class="state">множник обрано</span><span class="state">обрано предмети (≤4)</span><span class="state">обертання шкали</span><span class="state win">виграш → предмети в кошик</span><span class="state lose">програш — ставку втрачено</span><span class="state">промпти входу / депозиту</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Авторизація</span><span class="state">Депозит</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Навігація · заклик на Головній · Інвентар (ставка предметом)</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кошик (виграш) · Депозит · грати ще</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 08 REWARDS -->
+      <div class="frame" id="s-rewards">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">08</span><h4>Нагороди</h4><span class="route">/rewards</span></div>
+          <div class="frame-desc">Хаб ретеншну — маркетинг спирається на нагороди й справжній VIP. Гості можуть переглядати через інтро-попап, далі бачать заповнювачі + заклики увійти там, де мали б бути персональні дані.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · КЛЕЙМ GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li><b>Місячна гонка</b> — банер (назва · призовий пул $15.9K · живий відлік) + Топ-10 лідерборд (ти підсвічений)</li>
+                <li><b>Тижневий челендж</b> — банер + картка призу тижня + 3 gated-челенджі; виконав усі 3 → приз відкрито</li>
+                <li><b>Розіграш</b> — банер (приз + відлік) · 1 квиток / $25 ставок · пресети (1/5/10/25) + своя кількість · таблиця переможців (квитки + приз)</li>
+                <li><b>Промокод</b> — ввід → показує винагороду (предмет / кейс / баланс) → Клейм → «винагороду отримано»</li>
+                <li><b>Безкоштовні кейси за рівнем</b> — суцільна драбина рівнів: отримано ✓ / клейм / в процесі (XP до наступного) / заблоковано</li>
+                <li><b>Ranking System (VIP)</b> — карусель тірів Bronze→Diamond; окремий рейтинг від рівня (пороги XP + обсяги/завдання), показується як VIP · тір у профілі</li>
+                <li>Блок FAQ (акордеон)</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">гість (інтро-попап + заповнювачі)</span><span class="state">доступно до клейму</span><span class="state">вже отримано</span><span class="state">заблоковано (рівень/умова)</span><span class="state">таймер активний</span><span class="state">челендж виконано/заблоковано</span><span class="state">промо: показ → отримано</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Інтро гостя / Авторизація</span><span class="state">підтвердження клейму</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Навігація · тизер на Головній · промпт level-up · меню аватара</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кошик (отриманий предмет) · Профіль (рівень / VIP) · Авторизація</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 09 AFFILIATES -->
+      <div class="frame" id="s-aff">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">09</span><h4>Афіліати</h4><span class="route">/affiliates</span></div>
+          <div class="frame-desc">Важливо — на платформі будуть стрімери. Тепер в основній навігації. Публічний пояснювач + маркетинг для гостей; повний дашборд після входу.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ЛЕНДИНГ PUBLIC · ДАШБОРД GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Як це працює — 4 кроки + нота про rev-share (до 15%)</li>
+                <li><b>Гість:</b> маркетинговий текст + заповнювачі статистики + CTA Реєстрація / Вхід</li>
+                <li><b>Коду ще немає:</b> створити реферальний код</li>
+                <li><b>Код активний:</b> твій код · реферальне посилання · промокод для глядачів · статистика (кліки/реєстрації/комісія)</li>
+                <li>Розбивка ефективності коду (7д / 30д / весь час)</li>
+                <li>Запит виплати → Гаманець/баланс</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">гість (маркетинг + заповнювачі)</span><span class="state">коду ще немає</span><span class="state">код активний</span><span class="state">заробіток заповнено</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Авторизація</span><span class="state">створити код</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Основна навігація · футер · меню аватара · вкладка Профілю</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Гаманець (виплати) · Авторизація</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 10 MARKETPLACE -->
+      <div class="frame" id="s-market">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">10</span><h4>Маркетплейс (виконання)</h4><span class="route">/marketplace</span></div>
+          <div class="frame-desc">Площадка «гравець-гравцю» + хаб виконання. Купуй предмети, виставлені іншими гравцями (покупки йдуть в інвентар). Продаж і доставка керуються з головного <b>Кошика</b>; кошик у маркеті — лише для купівлі. Три вкладки.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · КЕРУВАННЯ GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li><b>Browse catalog</b> (публічна) — лоти гравців; картка: назва · ціна · зображення · рідкість/шанс · <b>власник</b> (→ його вітрина). Фільтри: Пошук · тип · ціна · рідкість (шанс) · Сортування. Наведення → Buy</li>
+                <li><b>Кошик купівлі</b> (sticky, лише browse) — відкладені покупки → «Buy all» → підтвердження → списання балансу → предмети в <b>Інвентар</b></li>
+                <li><b>On sale</b> (gated) — твої активні лоти; Unlist → назад в інвентар; порожньо → «Перейти в інвентар»</li>
+                <li><b>Tickets</b> (gated) — доставки: пошук + фільтр статусу, кроки в очікуванні→в обробці→відправлено, предмети (згортання «show more»), ім'я + адреса</li>
+                <li>Надсилання тікета (ім'я + адреса) викликається з <b>Кошика</b> «To Delivery»</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">browse</span><span class="state">гість (вкладки gated → авторизація)</span><span class="state">кошик купівлі заповнено</span><span class="state">підтвердження покупки</span><span class="state">на продажу</span><span class="state">тікет в очікуванні</span><span class="state">в обробці</span><span class="state win">відправлено</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Авторизація</span><span class="state">підтвердження покупки</span><span class="state">адреса / тікет</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Навігація · Кошик (Продаж → з'являється в On sale + Browse) · Кошик (To Delivery → Tickets)</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Інвентар (покупки) · Публічна вітрина власника · Депозит</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 10b CART -->
+      <div class="frame" id="s-cart">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">10b</span><h4>Кошик</h4><span class="route">/cart</span></div>
+          <div class="frame-desc">Хаб продажу та доставки. Кожен виграний/отриманий предмет спершу потрапляє сюди; гравець вирішує його долю. Відкривається з іконки кошика в хедері. Відмінний від кошика купівлі в маркеті.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Сітка виграних/отриманих предметів (rarity glow)</li>
+                <li>На кожному: <b>To Inventory</b> (відкласти) · <b>Sell to Market</b> (підтвердження → виставити лот)</li>
+                <li>Самері: <b>To Delivery (усі)</b> → тікет (ім'я + адреса) · <b>Sell all to Market</b> (підтвердження) · <b>Send all to Inventory</b></li>
+                <li>Текст підтвердження продажу адаптується: один («виставити [назва]?») чи кілька («виставити N предметів?»)</li>
+                <li>Продані → вкладка On sale + публічний Browse; доставка → Tickets</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">порожньо</span><span class="state">є предмети</span><span class="state">підтвердження продажу (1 / N)</span><span class="state">форма доставки</span><span class="state">переміщено в інвентар</span><span class="state">виставлено</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Авторизація</span><span class="state">підтвердження продажу</span><span class="state">форма доставки / тікет</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Виграші з Кейсів / Баттлів / Апгрейдера / Нагород · іконка кошика · Інвентар (додати)</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Маркетплейс (лот у On sale) · Маркетплейс (Tickets) · Інвентар</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 11 PROVABLY FAIR -->
+      <div class="frame" id="s-fair">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">11</span><h4>Provably Fair</h4><span class="route">/provably-fair</span></div>
+          <div class="frame-desc">Довіра, подана пасивно — реальна сторінка плюс лінки перевірки кожного результату. Ніколи не попап-переривання.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Верифікатор HMAC-SHA256</li>
+                <li>Лінк перевірки результату (дип-лінк із seed/hash)</li>
+                <li>Пояснення моделі чесності</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">інфо за замовч.</span><span class="state">перевірка</span><span class="state win">підтверджено ✓</span><span class="state lose">розбіжність ✗</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Футер · лінки результатів із Деталей кейса / Кімнати баттлу</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> назад до початкового результату</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 12 AUTH -->
+      <div class="frame" id="s-auth">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">12</span><h4>Авторизація</h4><span class="route">Реєстрація · Вхід</span></div>
+          <div class="frame-desc">Оверлеї, не маршрути — повертають користувача туди, де він був, і продовжують будь-яку gated-дію, що їх викликала.</div>
+          <div class="frame-action"><span class="badge b-modal">МОДАЛКИ</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Реєстрація — email + <b>Discord OAuth</b></li>
+                <li>Вхід</li>
+                <li>Підтвердження Age gate 18+</li>
+                <li class="opt">Захоплення промо/реферального коду при реєстрації</li>
+                <li>Забули пароль</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">реєстрація</span><span class="state">вхід</span><span class="state">OAuth-редирект</span><span class="state">помилка валідації</span><span class="state">блок age-gate</span><span class="state win">успіх → продовжити дію</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Будь-яка gated-дія · кнопки верхньої панелі</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> продовжити початкову дію · Депозит (промпт першого разу) · Головна</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 13 PROFILE -->
+      <div class="frame" id="s-profile">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">13</span><h4>Профіль і налаштування</h4><span class="route">/profile</span></div>
+          <div class="frame-desc">Домашня сторінка акаунта власника з вкладками налаштувань. Статистика завжди видима з перемикачем періоду. Містить VIP-рівень і дві налаштовувані вітрини, з яких читає публічна версія.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Аватар + нікнейм + рівень + XP-бар</li>
+                <li>VIP-рівень + прогрес (Bronze→Diamond)</li>
+                <li>Статистика — завжди видима, перемикач періоду (7д / 30д / весь час)</li>
+                <li><b>Win showcase</b> — тогл приватності (Public on/off) + <b>Show all</b> / <b>Show selected</b> (клік по предметах для вибору)</li>
+                <li><b>Battle win showcase</b> — ті ж контроли, лише перемоги в баттлах</li>
+                <li>Вкладки налаштувань: <b>Загальні</b> (email/нікнейм/Discord) · <b>Безпека</b> (пароль + 2FA) · <b>Самовиключення</b></li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">огляд</span><span class="state">статистика 7д/30д/весь час</span><span class="state">вітрина public/прихована</span><span class="state">вітрина all/selected</span><span class="state">вкладка: загальні</span><span class="state">вкладка: безпека (2FA)</span><span class="state">вкладка: самовиключення</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Меню аватара · індикатор рівня · Нагороди (рівень / VIP)</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Інвентар · Гаманець · Афіліати · Публічна вітрина (прев'ю) · Нагороди</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 14 SHOWCASE -->
+      <div class="frame" id="s-showcase">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">14</span><h4>Публічна вітрина виграшів</h4><span class="route">/u/[username]</span></div>
+          <div class="frame-desc">Публічний вид будь-якого користувача лише для читання, доступний за кліком на нікнейм у чаті чи будь-де на сайті. Читає дві вітрини власника й поважає його налаштування приватності + обраних предметів.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Нікнейм + аватар + бейдж рівня/VIP</li>
+                <li>Секція <b>Largest wins</b> (з Win showcase власника)</li>
+                <li>Секція <b>Battle wins</b> (з Battle win showcase власника)</li>
+                <li>Поважає контроли власника: приховано → нота «private»; обрані → лише вибрані предмети</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">заповнена вітрина</span><span class="state">лише обрані</span><span class="state">приватна (прихована власником)</span><span class="state">порожньо (ще немає виграшів)</span><span class="state">власний профіль (це ви)</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Клік на нікнейм у чаті · кімната баттлу · лідерборд</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> назад у контекст · (власний) редагування Профілю</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 15 INVENTORY -->
+      <div class="frame" id="s-inv">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">15</span><h4>Інвентар</h4><span class="route">/inventory</span></div>
+          <div class="frame-desc">«Відкладене» сховище: предмети, які гравець вирішив притримати (з Кошика), плюс покупки з маркетплейсу. Точка повернення в Кошик для продажу чи доставки.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>Сітка предметів (rarity glow) · фільтр за тіром · сортування за вартістю/датою</li>
+                <li>На кожному: <b>To cart</b> (щоб продати чи доставити) · <b>Details</b></li>
+                <li><b>Send all to cart</b> — масова дія</li>
+                <li><b>Details</b> попап — зображення · ринкова ціна · вартість · рідкість · шанс випадання · активні лоти · опис · Add to cart</li>
+                <li class="opt">Лінк «Use in Upgrader»</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">предмети присутні</span><span class="state">порожній інвентар</span><span class="state">фільтр (тір)</span><span class="state">деталі предмета відкрито</span><span class="state">переміщення в кошик</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Кошик (відкласти) · Маркетплейс (покупки) · меню аватара</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Кошик (To cart) · Апгрейдер (поставити предмет) · Деталі предмета</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 16 WALLET -->
+      <div class="frame" id="s-wallet">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">16</span><h4>Гаманець / Каса</h4><span class="route">/wallet</span></div>
+          <div class="frame-desc">Поповнення, історія та вхід у виведення, що редиректить у маркетплейс (без прямої форми доставки тут).</div>
+          <div class="frame-action"><span class="badge b-route">ROUTE</span><span class="badge b-gated">GATED</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li><b>Депозит</b> — крипта + подарункові картки</li>
+                <li class="opt">Apple Pay / фіат <span class="tag-s2">STAGE 2 (3-тя сторона)</span></li>
+                <li><b>Виведення</b> → редирект у Маркетплейс</li>
+                <li>Історія транзакцій</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">вибір методу депозиту</span><span class="state">крипто-адреса/QR</span><span class="state">введення подарункової картки</span><span class="state">очікування підтвердження</span><span class="state win">депозит зараховано</span><span class="state">список історії</span></div>
+              <label style="margin-top:14px">Модалки</label>
+              <div class="states"><span class="state">Депозит (також викликається глобально)</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Депозит у верхній панелі · меню аватара · промпти низького балансу · виплати афіліата</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> Маркетплейс (виведення) · продовжити дію, що потребувала коштів</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 17 LEGAL -->
+      <div class="frame" id="s-legal">
+        <div class="frame-head">
+          <div class="frame-title-row"><span class="num">17</span><h4>Юридичні та комплаєнс</h4><span class="route">/terms · /privacy · /aml</span></div>
+          <div class="frame-desc">Статичні сторінки, прилінковані у футері. Скоуп trust/legal на стороні клієнта (elderbreaks) — плейсхолдери на канвасі.</div>
+          <div class="frame-action"><span class="badge b-route">ROUTES</span><span class="badge b-public">PUBLIC</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Функції</label>
+              <ul class="fn">
+                <li>/terms — Умови користування</li>
+                <li>/privacy — Політика конфіденційності</li>
+                <li>/aml — Політика AML</li>
+                <li>Інфо про самовиключення / відповідальну гру (лінк на інструмент у Профілі)</li>
+              </ul>
+            </div>
+            <div class="block"><label>Стани</label>
+              <div class="states"><span class="state">статичний контент</span></div>
+            </div>
+          </div>
+          <div class="conns">
+            <div class="block"><label>↘ Вхід</label><div class="flow">Футер · age gate при реєстрації</div></div>
+            <div class="block"><label>↗ Вихід</label><div class="flow"><span class="arrow">→</span> назад · Самовиключення (Профіль)</div></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FLOWS ============ -->
+  <section>
+    <h2><span class="ix">06</span> Ключові user flow</h2>
+    <p class="lead">Наскрізні шляхи з точками рішень. Вони стають підписаними стрілковими маршрутами на канвасі.</p>
+
+    <h3 id="flow-onboard">A · Онбординг → перше відкриття кейса</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  A[Заходить на Головну] --> B{Залогінений?}
+  B -- Ні --> C[Клік Відкрити кейс / Реєстрація]
+  C --> D[[Модалка авторизації\nEmail / Discord]]
+  D --> E{18+?}
+  E -- Ні --> X[Заблоковано]
+  E -- Так --> F[Акаунт створено]
+  B -- Так --> F
+  F --> G[Перегляд /cases]
+  G --> H[Деталі кейса]
+  H --> I{Балансу достатньо?}
+  I -- Ні --> J[[Модалка депозиту\nкрипта / картка]]
+  J --> K
+  I -- Так --> K[Відкриття кейса · 6-стейт анімація]
+  H --> DEMO[Демо-спін\nбез балансу] --> H
+  K --> L[Предмет до Інвентаря/Кошика]
+  L --> M[Надіслати в Маркетплейс]
+    </pre></div>
+
+    <h3 id="flow-open">B · Цикл відкриття кейса (стани)</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  S0[Очікування] --> CHK{Демо чи платно?}
+  CHK -- Демо --> AN
+  CHK -- Платно --> BAL{Баланс?}
+  BAL -- мало --> DEP[[Депозит]] --> AN
+  BAL -- ок --> AN[Антисипація + звук рідкого]
+  AN --> SP[Спін] --> DEC[Сповільнення] --> RV[Ревіл]
+  RV --> MULTI{Мульти x2/x3/x4?}
+  MULTI -- так --> ROW[Рядок результатів] --> OUT
+  MULTI -- ні --> OUT[Предмет до Інвентаря]
+  RV --> VF[Перевірка · Provably Fair]
+  OUT --> AGAIN[Відкрити ще] --> S0
+    </pre></div>
+
+    <h3 id="flow-battle">C · Цикл баттлу</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  L[/Лобі /battles/] --> CH{Приєднатись чи Створити?}
+  CH -- Створити --> CR[/battles/create\nкейси · раунди · місця 1v1-6 · Borrow 95%/]
+  CR --> RM[Кімната баттлу]
+  CH -- Приєднатись --> SEAT{Баланс?}
+  SEAT -- мало --> DEP[[Депозит]] --> RM
+  SEAT -- ок --> RM
+  L -- Дивитись --> SPEC[Спектатор]
+  RM --> WAIT[Очікування гравців] --> CNT[Відлік] --> SPIN[Синхр. раунди]
+  SPIN --> RES{Результат}
+  RES -- Виграш --> WIN[Виграш до Інвентаря]
+  RES -- Програш --> BACK[Назад у лобі]
+  SPEC -.ставка за гравцем.-> S2[(Виплата Stage 2)]
+    </pre></div>
+
+    <h3 id="flow-cashout">D · Виграш → маркетплейс → фізична доставка</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  W[Виграш предмета\nкейс/баттл/апгрейд] --> INV[/inventory/]
+  INV --> SEND[Надіслати в маркетплейс]
+  INV -.-> UPG[Апгрейднути предмет] -.-> INV
+  SEND --> CART[Кошик маркетплейсу]
+  CART --> TK[[Тікет: ім'я + адреса + предмет]]
+  TK --> P[Статус: В очікуванні]
+  P --> PR[В обробці\nкоманда Crowns замовляє]
+  PR --> SH[Відправлено]
+    </pre></div>
+
+    <h3 id="flow-deposit">E · Депозит (викликається звідусіль)</h3>
+    <div class="diagram"><pre class="mermaid">
+flowchart LR
+  T[Низький баланс / CTA Депозит] --> M[[Модалка депозиту]]
+  M --> MET{Метод}
+  MET -- Крипта --> QR[Адреса / QR] --> CONF[Очікування підтверджень]
+  MET -- Подарункова картка --> GC[Ввести код] --> CONF
+  MET -. Apple Pay/Фіат .-> S2[(Stage 2 · 3-тя сторона)]
+  CONF --> CR[Баланс зараховано] --> RES[Продовжити початкову дію]
+    </pre></div>
+  </section>
+
+  <!-- ============ STAGE 2 ============ -->
+  <section id="stage2">
+    <h2><span class="ix">07</span> Stage 2 — шар після запуску</h2>
+    <p class="lead">Розмістіть це на канвасі як окрему притлумлену зону, з'єднану пунктиром. Шлях збірки — MVP-перш; ці фічі розширюють наявні екрани, а не замінюють їх.</p>
+    <div class="grid">
+      <div class="frame">
+        <div class="frame-head">
+          <div class="frame-title-row"><h4>Фічі після запуску</h4></div>
+          <div class="frame-desc">Розширення та нові поверхні, відкладені на Phase 2.</div>
+          <div class="frame-action"><span class="badge b-stage2">STAGE 2</span></div>
+        </div>
+        <div class="panel"><div class="panel-body">
+          <div class="col2">
+            <div class="block"><label>Розширює Кімнату баттлу</label>
+              <ul class="fn">
+                <li class="opt"><b>Режим трансляції</b> — перемикач при створенні → анонс у чаті → голос або камера+голос (WebRTC) → шар взаємодії зі спектаторами</li>
+                <li class="opt"><b>Ставка за гравцем</b> — спектатори ставлять на гравця/бота; 1v1 → x2, 1v1v1 → x3 тощо; виплата в реальному часі за результатом</li>
+                <li class="opt"><b>Приватні баттли</b> — кімнати під паролем (для стрімерів)</li>
+              </ul>
+            </div>
+            <div class="block"><label>Нові поверхні</label>
+              <ul class="fn">
+                <li class="opt"><b>Chat Rain</b> — гравці запускають «дощ монет» у чаті сайту</li>
+                <li class="opt"><b>Ігри Originals</b> — /crash · /mines · /plinko · /roulette · /dice</li>
+                <li class="opt"><b>Мобільна PWA</b> — встановлювана, push-сповіщення, портретні розкладки</li>
+                <li class="opt"><b>Apple Pay + фіат-депозити</b> — провайдер третьої сторони</li>
+                <li class="opt"><b>Повне звукове продакшн</b> — оригінальне аудіо (мікс rain × packdraw)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note s2"><b>Поза скоупом:</b> Без Pack Builder, без Steam trade offers, без gift cases (явно виключено клієнтом). Turbo mode опційний. 8-way баттли — стретч-диференціатор, залежить від оцінки складності.</div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CANVAS NOTES ============ -->
+  <section id="canvas">
+    <h2><span class="ix">08</span> Нотатки для канвасу (FigJam → Figma)</h2>
+    <p class="lead">Як перенести цю специфікацію на канвас перед wireframe.</p>
+    <div class="table-card"><table>
+      <tr><th>Крок</th><th>Що розмістити</th></tr>
+      <tr><td>1 · Скелет</td><td>Викладіть дерево IA з §03 як основу. Один фрейм на кожну пронумеровану картку екрана.</td></tr>
+      <tr><td>2 · Зони</td><td>Згрупуйте за лейнами: Публічне/Дискавері · Ігровий цикл · Акаунт · Каса/Виконання · Trust/Legal · Stage 2 (притлумлено).</td></tr>
+      <tr><td>3 · Контент вузла</td><td>Усередині кожного фрейму перелічіть Функції + Стани як стікери. Доступ позначте кольоровим бейджем за конвенцією §00.</td></tr>
+      <tr><td>4 · Стрілки</td><td>Малюйте зв'язки з блоку Вхід/Вихід кожної картки. Використовуйте флоу-діаграми §06, щоб підписати основні шляхи (A–E).</td></tr>
+      <tr><td>5 · Модалки</td><td>Рендеріть модалки як менші прикріплені вузли (Авторизація, Депозит, Provably Fair, Case picker, Адреса/Тікет) — вони оверлеять, а не навігують.</td></tr>
+      <tr><td>6 · Гейтинг</td><td>Накладіть матрицю §04 як легенду; іконка замка на gated-фреймах і пів-замка на view-public/act-gated.</td></tr>
+      <tr><td>7 · Wireframe</td><td>Після затвердження кожен фрейм стає low-fi wireframe; список Станів визначає екрани/варіанти для малювання.</td></tr>
+    </table></div>
+    <div class="note"><b>Референс-збірка:</b> попередній проєкт ішов за тим самим принципом вузол→wireframe — <a href="https://casewhale-wireframe.vercel.app/" target="_blank">casewhale-wireframe.vercel.app</a>. Дзеркальте цю фіделіті для wireframe-проходу V2.</div>
+  </section>
+
+  <div class="foot">
+    Crowns.gg × Tresor.tech · Карта сайту та специфікація User Flow · Підготовлено в червні 2026 · Оформлено за COSS UI (пресет Base UI / Cal.com) · Джерела: 02_Platform_Architecture_Reference, 07_Competitor_Research_Master, Crowns.gg Sitemap (клієнт) + Q&amp;A клієнта. Робочі значення кольорів/шрифтів — плейсхолдери до фінального бренду V2 та V1 Figma.
+  </div>
+</main>
+</div>
+
+<script>
+mermaid.initialize({
+  startOnLoad:true,
+  theme:'base',
+  themeVariables:{
+    background:'#161616',
+    primaryColor:'#1c1c1c',
+    primaryBorderColor:'#343434',
+    primaryTextColor:'#ededed',
+    secondaryColor:'#1a1a1a',
+    tertiaryColor:'#1a1a1a',
+    lineColor:'#5e5e5e',
+    edgeLabelBackground:'#161616',
+    clusterBkg:'#1a1a1a',
+    clusterBorder:'#343434',
+    fontFamily:'Geist, Inter, sans-serif',
+    fontSize:'13px'
+  },
+  flowchart:{curve:'basis',nodeSpacing:42,rankSpacing:54,padding:10}
+});
+</script>
+
+<!-- Legend panel + badge tooltips -->
+<button id="legendHandle" class="legend-handle" aria-label="Відкрити легенду"><span class="lh-ico">‹</span> Легенда</button>
+<aside class="legend-panel" aria-label="Легенда">
+  <div class="lp-head"><b>Легенда — як читати</b><button id="lpClose" class="lp-close" aria-label="Закрити">✕</button></div>
+  <div class="lp-body">
+    <div class="lp-item"><span class="badge b-route">ROUTE</span><p>Реальний URL/сторінка, на яку користувач може потрапити або задіп-лінкуватись.</p></div>
+    <div class="lp-item"><span class="badge b-modal">MODAL</span><p>Оверлей поверх поточної сторінки — без зміни URL. Повертає користувача туди, де він був.</p></div>
+    <div class="lp-item"><span class="badge b-public">PUBLIC</span><p>Доступно без акаунта. Працює на SEO та перше враження.</p></div>
+    <div class="lp-item"><span class="badge b-gated">GATED</span><p>Потребує входу. Будь-яка дія тут викликає модалку авторизації, якщо користувач не залогінений.</p></div>
+    <div class="lp-item"><span class="badge b-hybrid">ПЕРЕГЛЯД PUBLIC · ДІЯ GATED</span><p>Переглядати може будь-хто; цільова дія (відкрити / грати / надіслати) потребує входу.</p></div>
+    <div class="lp-item"><span class="badge b-stage2">STAGE 2</span><p>Після запуску. На канвасі розміщуйте як притлумлений/відкладений шар, поза шляхом збірки MVP.</p></div>
+    <div class="note" style="margin-top:12px"><b>Блоки фрейму:</b> <b>Функції</b> = компоненти й дії (• основні, ○ опційні). <b>Стани</b> = кожен візуальний стан, який має покрити wireframe. <b>Модалки</b> = оверлеї, які цей екран може викликати. <b>Зв'язки</b> = звідки користувач приходить (Вхід) і куди йде (Вихід).</div>
+  </div>
+</aside>
+
+<script>
+(function(){
+  var byText={"ПОСТІЙНА":"ПОСТІЙНА — каркас, присутній на кожному маршруті (топбар, навігація, чат, футер)."};
+  var byClass={
+    "b-route":"ROUTE — реальний URL/сторінка, на яку користувач може потрапити або задіп-лінкуватись.",
+    "b-modal":"MODAL — оверлей поверх поточної сторінки; без зміни URL. Повертає користувача туди, де він був.",
+    "b-public":"PUBLIC — доступно без акаунта. Працює на SEO та перше враження.",
+    "b-gated":"GATED — потребує входу. Будь-яка дія викликає модалку авторизації, якщо не залогінений.",
+    "b-hybrid":"ПЕРЕГЛЯД PUBLIC · ДІЯ GATED — переглядати може будь-хто; цільова дія (відкрити / грати / надіслати) потребує входу.",
+    "b-stage2":"STAGE 2 — після запуску. Відкладений шар на канвасі, поза шляхом збірки MVP."
+  };
+  var tip=document.createElement("div"); tip.className="tipbox"; document.body.appendChild(tip);
+  function show(el){
+    var t=byText[el.textContent.trim()];
+    if(!t){var c=Object.keys(byClass).filter(function(k){return el.classList.contains(k);})[0]; if(c)t=byClass[c];}
+    if(!t)return;
+    tip.textContent=t; tip.style.opacity="1";
+    var r=el.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight;
+    var left=r.left, top=r.bottom+8;
+    if(left+tw>window.innerWidth-12)left=window.innerWidth-12-tw;
+    if(top+th>window.innerHeight-12)top=r.top-8-th;
+    tip.style.left=Math.max(12,left)+"px"; tip.style.top=Math.max(12,top)+"px";
+  }
+  function hide(){tip.style.opacity="0";}
+  Array.prototype.forEach.call(document.querySelectorAll(".badge"),function(b){
+    b.classList.add("has-tip");
+    b.addEventListener("mouseenter",function(){show(b);});
+    b.addEventListener("mouseleave",hide);
+  });
+  var body=document.body;
+  document.getElementById("legendHandle").addEventListener("click",function(){body.classList.toggle("legend-open");});
+  document.getElementById("lpClose").addEventListener("click",function(){body.classList.remove("legend-open");});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")body.classList.remove("legend-open");});
+})();
+</script>
+</body>
+</html>
