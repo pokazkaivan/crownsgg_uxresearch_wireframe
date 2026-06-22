@@ -13,7 +13,7 @@ const Router = {
         case "cases":         return seg[1] ? Views.caseDetail(seg[1]) : Views.cases();
         case "cart":          return Views.cart();
         case "battles":
-          if (seg[1] === "create") return Views.battleCreate();
+          if (seg[1] === "create") return Views.battleCreate(seg[2]);
           return seg[1] ? Views.battleRoom(seg[1]) : Views.battles();
         case "upgrade":       return Views.upgrade();
         case "rewards":       return Views.rewards();

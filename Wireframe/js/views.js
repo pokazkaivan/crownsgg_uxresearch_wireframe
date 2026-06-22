@@ -299,45 +299,82 @@ const Views = {
     const bid = "b" + Date.now(); BATTLES[bid] = { cases: b.cases.slice(), fmt: b.fmt, mode: b.mode, seats: b.seats, youPlay: !watch, host: true };
     location.hash = "#/battles/" + bid;
   },
-  battleCreate() {
-    const picked = [];
+  battleCreate(type) {
+    document.body.classList.remove("selbar");
+    /* ---------- STEP 1: choose battle type ---------- */
+    if (type !== "solo" && type !== "team") {
+      this.set(`
+        <a class="btn sm ghost" href="#/battles" style="margin-bottom:12px">← Lobby</a>
+        <div class="page-head"><h1>Create battle</h1><p>Choose a battle type to start.</p></div>
+        <div class="grid g2" style="gap:24px;max-width:780px">
+          <a class="bc-type" href="#/battles/create/solo">${UI.ph("Solo Battle","case")}<div class="bc-type-b"><h3>Create Solo Battle</h3><p class="sub">Every player for themselves — 1v1 up to 6-way.</p></div></a>
+          <a class="bc-type" href="#/battles/create/team">${UI.ph("Team Battle","case")}<div class="bc-type-b"><h3>Create Team Battle</h3><p class="sub">Teams split the pot — 2v2, 3v3, 2v2v2.</p></div></a>
+        </div>`);
+      return;
+    }
+    /* ---------- STEP 2: configurator ---------- */
+    const team = type === "team";
+    const FORMATS = team
+      ? [["2v2","2v2"],["3v3","3v3"],["2v2v2","2v2v2"]]
+      : [["1v1","1v1"],["3-way","1v1v1"],["4-way","1v1v1v1"],["5-way","1v1v1v1v1"],["6-way","1v1v1v1v1v1"]];
+    const MODES = [["crowspin","Crow Spin"],["fast","Fast Mode"],["crazy","Crazy Mode"],["jackpot","Jackpot Mode"],["terminal","Terminal Mode"]];
+    const MAX = 50;
+    let fmt = FORMATS[0][1]; const modes = {}; const picked = [];
+    let fSearch = "", fPrice = "all", fSort = "feat";
     this.set(`
-      <a class="btn sm ghost" href="#/battles" style="margin-bottom:12px">← Lobby</a>
-      <div class="page-head"><h1>Create battle</h1><p>Add cases (each is one round), choose players &amp; mode, then create.</p></div>
-      <div class="grid g2" style="gap:24px;align-items:start">
-        <div class="panel card-b">
-          <div class="field"><label>Add case · one per round</label><div class="row"><select class="input" id="bc-case">${DATA.CASES.filter(c => !c.free).map(c => `<option value="${c.id}">${UI.esc(c.name)} — ${UI.money(c.price)}</option>`).join("")}</select><button class="btn" id="bc-add">Add</button></div></div>
-          <div class="bt-cases" id="bc-list" style="flex-wrap:wrap;min-height:60px"></div>
-          <div class="field" style="margin-top:14px"><label>Players</label><div class="chips" id="bc-seats">${[2,3,4,5,6].map(n => `<div class="chip ${n===2?"active":""}" data-seat="${n}">${n===2?"1v1":n+"-way"}</div>`).join("")}<span class="chip" style="opacity:.5;cursor:not-allowed">8-way · TBD</span></div></div>
-          <div class="field"><label>Mode</label><div class="chips" id="bc-mode"><div class="chip active" data-mode="Standard">Standard</div><div class="chip" data-mode="Crazy">Crazy · lowest wins</div></div></div>
-          <label class="check" style="margin-bottom:8px"><input type="checkbox" id="bc-borrow"> Borrow Mode (up to 95%)</label>
-          <label class="check" style="margin-bottom:8px"><input type="checkbox" disabled> Private / password <span class="badge" style="margin-left:6px">Stage 2</span></label>
-          <label class="check"><input type="checkbox" disabled> Broadcast (voice/cam) <span class="badge" style="margin-left:6px">Stage 2</span></label>
+      <div class="open-bar"><div class="row" style="gap:10px"><a class="icon-btn" href="#/battles/create" title="Back">${ICN.back}</a><b style="font-size:15px">Create ${team?"Team":"Solo"} Battle</b></div></div>
+      <section class="sec" style="margin-top:14px"><h3 class="h2">Players</h3>
+        <div class="grid ${team?"g3":"g5"} fmt-grid" id="fmt-grid">${FORMATS.map(([label,val],i)=>`<div class="fmt-card ${i===0?"sel":""}" data-fmt="${val}"><span class="radio"></span><b>${label}</b></div>`).join("")}</div></section>
+      <section class="sec"><h3 class="h2">Modes</h3>
+        <div class="grid g3 mode-grid">${MODES.map(([k,label])=>`<div class="mode-card"><span>${label}</span><button class="tgl" data-mode="${k}" role="switch" aria-checked="false"><i></i></button></div>`).join("")}</div></section>
+      <section class="sec" style="padding-bottom:96px"><div class="sec-head"><h3 class="h2">Add cases</h3><span class="sub">1 case = 1 round · max ${MAX}</span></div>
+        <div class="up-filters">
+          <input class="input" id="bc-q" placeholder="Search cases…" style="max-width:220px">
+          <select class="input" id="bc-price" style="max-width:160px"><option value="all">All prices</option><option value="lt50">Under $50</option><option value="50-300">$50 – $300</option><option value="gt300">$300+</option></select>
+          <select class="input" id="bc-sort" style="max-width:160px"><option value="feat">Sort: Featured</option><option value="low">Price ↑</option><option value="high">Price ↓</option></select>
         </div>
-        <div class="panel card-b">
-          <h3 class="h2">Summary</h3>
-          <table><tbody><tr><td>Rounds (cases)</td><td class="mono" id="bc-rounds" style="text-align:right">0</td></tr><tr><td>Players</td><td class="mono" id="bc-pl" style="text-align:right">2</td></tr><tr><td>Mode</td><td id="bc-md" style="text-align:right">Standard</td></tr><tr><td>Borrow</td><td id="bc-bw" style="text-align:right">Off</td></tr><tr><td>Your entry</td><td class="mono" id="bc-entry" style="text-align:right">$0.00</td></tr></tbody></table>
-          <button class="btn primary block" style="margin-top:14px" id="bc-go" disabled>Add a case to create</button>
-        </div>
+        <div class="grid g4" id="bc-grid"></div>
+      </section>
+      <div class="select-bar" id="bc-bar">
+        <div class="sel-items" id="bc-bar-items"></div>
+        <div class="sel-total" id="bc-bar-total"></div>
+        <button class="btn primary" id="bc-go" disabled>Create a battle</button>
       </div>`);
-    let seats = 2, mode = "Standard";
-    const renderList = () => { const l = this.q("#bc-list");
-      if (!picked.length) { l.innerHTML = `<span class="sub">No cases yet — add at least one.</span>`; return; }
-      l.innerHTML = picked.map((cid, i) => `<div class="ph mini bt-case" title="${UI.esc(DATA.caseById(cid).name)} — remove" data-rm="${i}" style="cursor:pointer"></div>`).join("");
-      this.qa("[data-rm]").forEach(el => el.addEventListener("click", () => { picked.splice(+el.dataset.rm, 1); renderList(); upd(); }));
-    };
-    const upd = () => { const cost = picked.reduce((s, cid) => s + DATA.caseById(cid).price, 0);
-      this.q("#bc-rounds").textContent = picked.length; this.q("#bc-pl").textContent = seats; this.q("#bc-md").textContent = mode; this.q("#bc-bw").textContent = this.q("#bc-borrow").checked ? "95%" : "Off"; this.q("#bc-entry").textContent = UI.money(cost);
-      const go = this.q("#bc-go"); go.disabled = !picked.length; go.textContent = picked.length ? "Create & join" : "Add a case to create"; };
-    this.q("#bc-add").addEventListener("click", () => { picked.push(this.q("#bc-case").value); renderList(); upd(); });
-    this.qa("#bc-seats [data-seat]").forEach(ch => ch.addEventListener("click", () => { this.qa("#bc-seats [data-seat]").forEach(x => x.classList.remove("active")); ch.classList.add("active"); seats = parseInt(ch.dataset.seat, 10); upd(); }));
-    this.qa("#bc-mode [data-mode]").forEach(ch => ch.addEventListener("click", () => { this.qa("#bc-mode [data-mode]").forEach(x => x.classList.remove("active")); ch.classList.add("active"); mode = ch.dataset.mode; upd(); }));
-    this.q("#bc-borrow").addEventListener("change", upd);
-    renderList(); upd();
-    this.q("#bc-go").addEventListener("click", () => { if (!UI.requireAuth()) return; if (!picked.length) return;
-      const fmt = Array(seats).fill(1).join("v"); const bid = "b" + Date.now();
-      BATTLES[bid] = { cases: picked.slice(), fmt, mode, seats, borrow: this.q("#bc-borrow").checked, youPlay: true, host: true };
-      location.hash = "#/battles/" + bid; });
+
+    const renderBar = () => { const bar = this.q("#bc-bar"); const go = this.q("#bc-go");
+      if (!picked.length) { bar.classList.remove("show"); document.body.classList.remove("selbar"); go.disabled = true; return; }
+      bar.classList.add("show"); document.body.classList.add("selbar");
+      const counts = {}; const order = []; picked.forEach(id => { counts[id]=(counts[id]||0)+1; if(!order.includes(id)) order.push(id); });
+      this.q("#bc-bar-items").innerHTML = order.map(id => `<div class="bc-chip" title="${UI.esc(DATA.caseById(id).name)}">${UI.ph("","mini")}${counts[id]>1?`<span class="bc-cx">×${counts[id]}</span>`:""}</div>`).join("");
+      const total = picked.reduce((s,id)=>s+DATA.caseById(id).price,0);
+      this.q("#bc-bar-total").innerHTML = `<b>${picked.length}</b> case${picked.length>1?"s":""} · <b class="mono">${UI.money0(total)}</b>`;
+      go.disabled = false; go.textContent = "Create a battle for " + UI.money0(total); };
+    const ctrlHTML = (id) => { const n = picked.filter(x=>x===id).length;
+      return n===0 ? `<button class="btn sm primary block" data-bcadd="${id}">ADD</button>`
+        : `<div class="bc-step"><button class="bc-mn" data-bcdec="${id}" aria-label="Remove one">−</button><span class="bc-n">${n}</span><button class="bc-pl" data-bcinc="${id}" aria-label="Add one">+</button></div>`; };
+    const refreshCtrl = (id) => { const el = this.q(`[data-ctrl="${id}"]`); if (el) el.innerHTML = ctrlHTML(id); };
+    const drawGrid = () => { let list = DATA.CASES.filter(c => !c.free && c.name.toLowerCase().includes(fSearch));
+      if (fPrice==="lt50") list=list.filter(c=>c.price<50); else if (fPrice==="50-300") list=list.filter(c=>c.price>=50&&c.price<=300); else if (fPrice==="gt300") list=list.filter(c=>c.price>300);
+      if (fSort==="low") list=list.slice().sort((a,b)=>a.price-b.price); else if (fSort==="high") list=list.slice().sort((a,b)=>b.price-a.price);
+      this.q("#bc-grid").innerHTML = list.length ? list.map(c=>{ const v=["L","M","H","I"][Views.caseVol(c)];
+        return `<div class="item-card bc-cc">${UI.ph(c.name,"case")}<div class="row between"><div class="nm">${UI.esc(c.name)}</div>${c.tag?`<span class="badge">${c.tag}</span>`:""}</div><div class="item-meta"><span class="vl">${UI.money0(c.price)}</span><span class="sub" title="Volatility">Vol ${v}</span></div><div class="bc-ctrl" data-ctrl="${c.id}">${ctrlHTML(c.id)}</div></div>`;
+      }).join("") : `<div class="empty" style="grid-column:1/-1">No cases match.</div>`; };
+
+    this.q("#bc-grid").addEventListener("click",(e)=>{
+      const add=e.target.closest("[data-bcadd]"), inc=e.target.closest("[data-bcinc]"), dec=e.target.closest("[data-bcdec]");
+      if (add||inc){ const id=add?add.dataset.bcadd:inc.dataset.bcinc; if(picked.length>=MAX){ UI.toast("Max "+MAX+" cases reached"); return; } picked.push(id); refreshCtrl(id); renderBar(); }
+      else if (dec){ const id=dec.dataset.bcdec; const i=picked.indexOf(id); if(i>=0) picked.splice(i,1); refreshCtrl(id); renderBar(); }
+    });
+    this.qa("#fmt-grid .fmt-card").forEach(c=>c.addEventListener("click",()=>{ this.qa("#fmt-grid .fmt-card").forEach(x=>x.classList.remove("sel")); c.classList.add("sel"); fmt=c.dataset.fmt; }));
+    this.qa(".mode-grid .tgl").forEach(t=>t.addEventListener("click",()=>{ const k=t.dataset.mode; modes[k]=!modes[k]; t.classList.toggle("on",modes[k]); t.setAttribute("aria-checked",modes[k]?"true":"false"); }));
+    this.q("#bc-q").addEventListener("input",e=>{ fSearch=e.target.value.toLowerCase(); drawGrid(); });
+    this.q("#bc-price").addEventListener("change",e=>{ fPrice=e.target.value; drawGrid(); });
+    this.q("#bc-sort").addEventListener("change",e=>{ fSort=e.target.value; drawGrid(); });
+    this.q("#bc-go").addEventListener("click",()=>{ if(!UI.requireAuth()) return; if(!picked.length) return;
+      const seats=Views.parseTeams(fmt).reduce((a,b)=>a+b,0); const bid="b"+Date.now();
+      BATTLES[bid]={ cases:picked.slice(), fmt, mode:modes.crazy?"Crazy":"Standard", seats, flags:{ ...modes }, youPlay:true, host:true };
+      location.hash="#/battles/"+bid; });
+    drawGrid(); renderBar();
   },
   battleRoom(id) {
     let cfg = BATTLES[id];
