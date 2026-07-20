@@ -19,12 +19,15 @@ const Router = {
         case "rewards":       return Views.rewards();
         case "affiliates":    return Views.affiliates();
         case "marketplace":   return Views.marketplace();
+        case "tickets":       return Views.tickets();
         case "provably-fair": return Views.fair();
         case "faq":           return Views.faq();
         case "support":       return Views.support();
         case "profile":       return Views.profile();
+        case "settings":      return Views.settings(seg[1]);
         case "inventory":     return Views.inventory();
         case "wallet":        return Views.wallet();
+        case "withdraw":      return Views.withdraw();
         case "u":             return Views.showcase(decodeURIComponent(seg[1] || "Player"));
         case "legal":         return Views.legal(seg[1] || "terms");
         default:              return Views.home();
@@ -40,7 +43,10 @@ const Router = {
 const ACTIONS = {
   auth: (el) => UI.openAuth(el.dataset.mode || "signin"),
   authTab: (el) => UI.openAuth(el.dataset.mode),
-  authDiscord: () => { const u = UI.el("auth-user"); if (u && !u.value) u.value = "discord_user"; UI.doAuth(document.querySelector("[data-action='doAuth']")?.dataset.mode || "signin"); },
+  authOAuth: (el) => { const p = el.dataset.provider || "discord";
+    const u = UI.el("auth-user"); if (u && !u.value) u.value = p + "_user";
+    const age = UI.el("auth-age"); if (age) age.checked = true;                 // provider sign-up implies the age/terms step
+    UI.doAuth(document.querySelector("[data-action='doAuth']")?.dataset.mode || "signin"); },
   doAuth: (el) => UI.doAuth(el.dataset.mode),
   forgot: () => UI.forgot(),
   logout: () => { State.d.user.loggedIn = false; State.save(); UI.updateChrome(); UI.toast("Signed out"); location.hash = "#/"; },
@@ -75,8 +81,6 @@ const ACTIONS = {
   toCart: (el) => Views.toCart(el.dataset.uid),
   fromCart: (el) => Views.fromCart(el.dataset.uid),
   cartAll: () => Views.cartAll(),
-  buyMarket: (el) => Views.buyMarket(el.dataset.lid),
-  sellOnMarket: (el) => Views.sellOnMarket(el.dataset.uid),
   cartToInv: () => Views.cartToInv(),
   cartToInvOne: (el) => Views.cartToInvOne(el.dataset.uid),
   cartSellOne: (el) => Views.cartSellOne(el.dataset.uid),
@@ -85,13 +89,10 @@ const ACTIONS = {
   buyCartConfirm: () => Views.buyCartConfirm(),
   buyCartRemove: (el) => Views.buyCartRemove(el.dataset.uid),
   addBuyCart: (el) => Views.addBuyCart(el.dataset.lid),
-  unlist: (el) => Views.unlist(el.dataset.lid),
   submitTicket: () => Views.submitTicket(),
   confirmTicket: () => Views.confirmTicket(),
-  sellItem: (el) => Views.sellItem(el.dataset.uid),
   itemDetail: (el) => Views.itemDetail(el.dataset.uid),
 
-  reqStats: () => Views.reqStats(),
   scToggle: (el) => Views.scToggle(el.dataset.sc),
   scMode: (el) => Views.scMode(el.dataset.sc, el.dataset.mode),
   scPick: (el) => Views.scPick(el.dataset.sc, el.dataset.uid),
@@ -119,6 +120,6 @@ document.addEventListener("keydown", (e) => {
 State.init();
 UI.renderShell();
 UI.updateChrome();
-UI.startDrops();
+// UI.startDrops();   // Live drops bar hidden — re-enable together with the .drops markup in ui.js
 Router.start();
 UI.ageGate();

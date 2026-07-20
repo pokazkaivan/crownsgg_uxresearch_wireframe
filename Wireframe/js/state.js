@@ -10,10 +10,10 @@ const State = {
       ageOk: false,
       user: { loggedIn: false, username: "", email: "", balance: 0, level: 1, xp: 0, xpMax: 1000, vip: "Bronze" },
       inv: [],            // {uid,id,name,value,tier}
-      cart: [],           // main cart — won items land here · sell or order delivery
+      cart: [],           // main cart — won items land here · keep, sell to balance, or order delivery
       buyCart: [],         // marketplace buy-cart — items staged for purchase
-      listings: [],       // your items listed for sale on the marketplace
       tickets: [],        // {id,items:[],status,addr}
+      withdrawals: [],    // {id,coin,network,amount,fee,net,address,status,ts,txid}
       tx: [],             // {id,type,amount,note,ts}
       affiliate: { code: "", clicks: 0, signups: 0, commission: 0 },
       raffle: 0,
@@ -44,16 +44,17 @@ const State = {
   id() { return "x" + this.d.seq++; },
 
   // ---- mutations ----
-  credit(amount, note) {
+  // kind classifies the entry for the wallet tabs: deposit | withdrawal | wager | sale | purchase | bonus
+  credit(amount, note, kind) {
     this.d.user.balance = +(this.d.user.balance + amount).toFixed(2);
-    this.tx("deposit", amount, note || "Deposit");
+    this.tx("deposit", amount, note || "Deposit", kind || "deposit");
   },
-  debit(amount, note) {
+  debit(amount, note, kind) {
     this.d.user.balance = +(this.d.user.balance - amount).toFixed(2);
-    this.tx("spend", -amount, note || "Wager");
+    this.tx("spend", -amount, note || "Wager", kind || "wager");
   },
-  tx(type, amount, note) {
-    this.d.tx.unshift({ id: this.id(), type, amount: +amount.toFixed(2), note, ts: Date.now() });
+  tx(type, amount, note, kind) {
+    this.d.tx.unshift({ id: this.id(), type, amount: +amount.toFixed(2), note, kind: kind || (type === "deposit" ? "deposit" : "wager"), ts: Date.now() });
     this.save();
   },
   addItem(itemId) {

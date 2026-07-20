@@ -82,7 +82,7 @@ const DATA = (function () {
   const NAMES = ["Nova","Kato","Riley","Vex","Juno","Pax","Echo","Wren","Sable","Dax","Mira","Orin","Zephy","Lumi","Bram","Cleo"];
   const randName = () => NAMES[Math.floor(Math.random() * NAMES.length)];
 
-  // ---- marketplace listings (items put up for sale by other players) ----
+  // ---- marketplace catalog (store stock — buy with balance, users cannot list) ----
   const ITEM_TYPE = { socks:"Apparel",cap:"Apparel",hoodie:"Apparel",jacket:"Apparel",sneakers:"Apparel",
     keychain:"Accessory",stickers:"Accessory",phonecase:"Accessory",bottle:"Accessory",backpack:"Accessory",
     earbuds:"Tech",watch:"Tech",keyboard:"Tech",drone:"Tech",tablet:"Tech",console:"Tech",phone:"Tech",camera:"Tech",luxwatch:"Tech" };
@@ -95,5 +95,35 @@ const DATA = (function () {
     return out; })();
   function marketById(lid) { return MARKET.find((m) => m.lid === lid); }
 
-  return { ITEMS, CASES, DEALS, FAQ, item, caseById, dealById, odds, pick, poolTotal, caseValue, randName, NAMES, MARKET, ITEM_TYPE, RARITY, DROP, marketById };
+  // ---- crypto withdrawal rails ----
+  const COINS = [
+    { id:"LTC",  name:"Litecoin",  networks:["Litecoin"],                   min:10, fee:0.15, eta:"2–8 min",   note:"Cheapest & fastest" },
+    { id:"SOL",  name:"Solana",    networks:["Solana"],                     min:10, fee:0.20, eta:"1–3 min",   note:"" },
+    { id:"USDT", name:"Tether",    networks:["TRC-20","ERC-20","Solana"],   min:20, fee:1.00, eta:"3–10 min",  note:"Stablecoin" },
+    { id:"USDC", name:"USD Coin",  networks:["ERC-20","Solana"],            min:20, fee:1.00, eta:"3–10 min",  note:"Stablecoin" },
+    { id:"ETH",  name:"Ethereum",  networks:["ERC-20"],                     min:25, fee:2.50, eta:"5–15 min",  note:"Higher gas" },
+    { id:"BTC",  name:"Bitcoin",   networks:["Bitcoin","Lightning"],        min:30, fee:2.00, eta:"10–30 min", note:"" },
+  ];
+  // fee & speed depend on the network the payout is sent over
+  function netFee(coin, network) {
+    const c = coinById(coin); if (!c) return 0;
+    if (network === "Lightning") return 0.05;
+    if (network === "Solana") return 0.10;
+    if (network === "TRC-20") return 0.50;
+    if (network === "ERC-20") return coin === "ETH" ? 2.50 : 3.00;
+    return c.fee;
+  }
+  function netEta(coin, network) {
+    const c = coinById(coin);
+    if (network === "Lightning") return "instant";
+    if (network === "Solana") return "1–3 min";
+    if (network === "TRC-20") return "3–10 min";
+    if (network === "ERC-20") return "5–15 min";
+    return c ? c.eta : "—";
+  }
+  function coinById(id) { return COINS.find((c) => c.id === id); }
+  // network fee is charged per-network; TRC-20 is notably cheaper than ERC-20
+
+
+  return { ITEMS, CASES, DEALS, FAQ, item, caseById, dealById, odds, pick, poolTotal, caseValue, randName, NAMES, MARKET, ITEM_TYPE, RARITY, DROP, marketById, COINS, coinById, netFee, netEta };
 })();

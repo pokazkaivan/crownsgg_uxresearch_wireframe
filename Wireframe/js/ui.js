@@ -21,6 +21,15 @@ const ICN = {
   cart: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.2a1.5 1.5 0 0 0 1.5-1.2L21 8H6"/><circle cx="9" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>`,
   box: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7l9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>`,
   ticket: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2v0a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4 2 2 0 0 1 0-4Z"/><path d="M15 6v12" stroke-dasharray="2 2"/></svg>`,
+  user: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7v0.5H4z"/></svg>`,
+  dice: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg>`,
+  wallet: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1"/><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6H16a2 2 0 0 0 0 4h5"/></svg>`,
+  download: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>`,
+  gear: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>`,
+  exit: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8l4 4-4 4"/><path d="M19 12H9"/></svg>`,
+  discord: `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.9A19 19 0 0 0 15.7 3.5l-.2.4a17 17 0 0 1 4.1 1.3 15.6 15.6 0 0 0-13.2 0 17 17 0 0 1 4.1-1.3l-.2-.4A19 19 0 0 0 3.7 4.9C1.2 8.6.5 12.2.8 15.7a19 19 0 0 0 5.8 2.9l.6-1a12.5 12.5 0 0 1-2-.9l.5-.4a13.6 13.6 0 0 0 12.6 0l.5.4a12.5 12.5 0 0 1-2 .9l.6 1a19 19 0 0 0 5.8-2.9c.4-4-.7-7.6-3-10.8ZM8.4 13.6c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3Zm7.2 0c-1.1 0-2-1-2-2.3s.9-2.3 2-2.3 2 1 2 2.3-.9 2.3-2 2.3Z"/></svg>`,
+  steam: `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-10 9.7l5.3 2.2a2.9 2.9 0 0 1 1.7-.5l2.4-3.5v-.1a3.8 3.8 0 1 1 3.8 3.8h-.1l-3.4 2.4a2.9 2.9 0 0 1-5.7.5L2.3 14.9A10 10 0 1 0 12 2ZM7.7 15.3l1.2.5a2.2 2.2 0 1 0 1.2-2.9l1.3.5a1.6 1.6 0 1 1-1.2 3l-2.5-1.1Zm7.5-3.4a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2Zm0-.7a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z"/></svg>`,
+  trophy: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 4h10v6a5 5 0 0 1-10 0V4Z"/><path d="M17 6h3v2a3 3 0 0 1-3 3M7 6H4v2a3 3 0 0 0 3 3"/><path d="M10 19h4M9 21h6M12 15v4"/></svg>`,
 };
 const CHAT_USERS = [["Stalk3r","VII"],["GrootJr","VI"],["Teaby","I"],["Nova","IX"],["m","VI"],["Sable","IV"],["Dax","II"],["Pax","V"],["Wren","VIII"],["Juno","III"]];
 const CHAT_LINES = ["gl on the hype vault pulls","cmon yellow clutch","gg :D","anyone running a battle?","money back its time","last battle for today ig","that pull was insane","need one more for a 4-way","lets gooo","rip my balance","crowbot diff lol","first pull this case is cursed","who's up for street style","/rain when","just claimed my free case"];
@@ -76,11 +85,12 @@ const UI = {
         <nav class="nav-links" id="navlinks"></nav>
         <div class="nav-right" id="navright"></div>
       </div></header>
+      <!-- Live drops bar — HIDDEN (kept for easy restore). To bring it back, delete these two comment lines.
       <div class="drops"><div class="drops-inner">
         <span class="drops-label"><span class="dot-live"></span> Live drops</span>
         <div class="drops-track" id="drops"></div>
-        <button class="btn sm ghost" data-action="toggleChat">${ICN.chat} Chat</button>
       </div></div>
+      -->
       <div class="layout"><main class="view" id="view"></main>
         <footer class="foot">
           <div class="foot-inner">
@@ -135,6 +145,7 @@ const UI = {
       const xp = Math.min(100, u.xp / u.xpMax * 100);
       const cartN = State.d.cart.length;
       right.innerHTML = `
+        <button class="icon-btn" data-action="toggleChat" title="Chat">${ICN.chat}</button>
         <button class="icon-btn" data-action="openSearch" title="Search">${ICN.search}</button>
         <button class="icon-btn cart-btn" data-action="openCart" title="Cart — items to ship or sell">${ICN.cart}${cartN ? `<span class="cart-count">${cartN}</span>` : ""}</button>
         <a href="#/profile" class="lvl-chip" title="Level ${u.level} · ${u.xp}/${u.xpMax} XP — open profile">Lv ${u.level}<span class="mini-xp"><i style="width:${xp}%"></i></span></a>
@@ -143,11 +154,13 @@ const UI = {
         <div class="menu"><div class="avatar" data-action="avatarMenu" title="${UI.esc(u.username)}">${UI.esc((u.username[0] || "U").toUpperCase())}</div>
           <div class="menu-pop hidden" id="avmenu">
             <a href="#/profile">Profile</a><a href="#/inventory">Inventory</a><a href="#/wallet">Wallet</a>
-            <a href="#/affiliates">Affiliates</a><a href="#/profile">Settings</a>
+            <a href="#/withdraw">Withdraw</a><a href="#/tickets">Delivery tickets</a>
+            <a href="#/affiliates">Affiliates</a><a href="#/settings">Settings</a>
             <div class="menu-sep"></div><button data-action="logout">Sign out</button>
           </div></div>`;
     } else {
       right.innerHTML = `
+        <button class="icon-btn" data-action="toggleChat" title="Chat">${ICN.chat}</button>
         <button class="icon-btn" data-action="openSearch" title="Search">${ICN.search}</button>
         <button class="btn sm ghost" data-action="auth" data-mode="signin">Sign in</button>
         <button class="btn sm primary" data-action="auth" data-mode="signup">Sign up</button>`;
@@ -205,8 +218,11 @@ const UI = {
           <div class="tab ${!signup ? "active" : ""}" data-action="authTab" data-mode="signin">Sign in</div>
           <div class="tab ${signup ? "active" : ""}" data-action="authTab" data-mode="signup">Sign up</div>
         </div>
-        <button class="btn block" style="justify-content:center;margin-bottom:12px" data-action="authDiscord">Continue with Discord</button>
-        <div class="row" style="margin:0 0 12px"><div style="flex:1;height:1px;background:var(--border)"></div><span class="muted" style="font-size:11px">or</span><div style="flex:1;height:1px;background:var(--border)"></div></div>
+        <div class="auth-oauth">
+          <button class="btn" data-action="authOAuth" data-provider="discord">${ICN.discord} Discord</button>
+          <button class="btn" data-action="authOAuth" data-provider="steam">${ICN.steam} Steam</button>
+        </div>
+        <div class="row" style="margin:12px 0"><div style="flex:1;height:1px;background:var(--border)"></div><span class="muted" style="font-size:11px">or continue with email</span><div style="flex:1;height:1px;background:var(--border)"></div></div>
         <div class="field"><label>Username</label><input class="input" id="auth-user" placeholder="player_one" value="${UI.esc(State.d.user.username || "")}"></div>
         ${signup ? `<div class="field"><label>Email</label><input class="input" id="auth-email" placeholder="you@email.com"></div>
         <div class="field"><label>Password</label><input class="input" type="password" placeholder="••••••••"></div>
@@ -338,10 +354,10 @@ const UI = {
             <div class="kv"><span class="k">Item value</span><b class="mono">${UI.money(entry.value)}</b></div>
             <div class="kv"><span class="k">Rarity</span><b>${rarity}</b></div>
             <div class="kv"><span class="k">Drop chance</span><b class="mono">${drop}%</b></div>
-            <div class="kv"><span class="k">Active listings</span><b class="mono">${listings.length}</b></div>
+            <div class="kv"><span class="k">In store</span><b class="mono">${listings.length}</b></div>
           </div>
         </div>
-        <p class="muted" style="font-size:12.5px;margin-top:12px">${rarity} ${type.toLowerCase()} — a real physical item shipped to your door, or list it on the marketplace. Market price reflects recent player listings.</p>
+        <p class="muted" style="font-size:12.5px;margin-top:12px">${rarity} ${type.toLowerCase()} — a real physical item shipped to your door. Move it to your cart to sell it straight to your balance, or order delivery. Market price reflects current store stock.</p>
       </div>
       <div class="modal-foot">
         ${entry.uid ? `<button class="btn primary" data-action="toCart" data-uid="${entry.uid}" data-close="1">Add to cart</button>` : ""}
@@ -470,7 +486,7 @@ const UI = {
     const tileH = first.getBoundingClientRect().height || 118;
     const tileFull = tileH + 10;
     const center = (colEl.clientHeight || 460) / 2;
-    const target = -(WIN * tileFull + tileH / 2 - center) + (Math.random() * 14 - 7);
+    const target = -(WIN * tileFull + tileH / 2 - center);   // land centred (markWinV snaps to the exact centre line after)
     if (mode === "turbo") { strip.style.transition = "none"; strip.style.transform = `translateY(${target}px)`; return Promise.resolve(); }
     return new Promise((res) => {
       strip.style.transition = "none"; strip.style.transform = "translateY(0)"; void strip.offsetWidth;
@@ -481,5 +497,19 @@ const UI = {
       strip.addEventListener("transitionend", fin, { once: true }); setTimeout(fin, dur + 180);
     });
   },
-  markWinV(colEl, WIN) { const t = colEl.querySelector(".reel-vstrip").children[WIN]; if (t) t.classList.add("win"); },
+  markWinV(colEl, WIN) {
+    const strip = colEl.querySelector(".reel-vstrip"); const t = strip && strip.children[WIN]; if (!t) return;
+    t.classList.add("win");
+    // Snap the winner exactly onto the centre line (opposite the arrows), regardless of
+    // spin jitter or variable tile heights (long names wrapping). Measure actual position.
+    try {
+      const fr = colEl.getBoundingClientRect(), tr = t.getBoundingClientRect();
+      const delta = (fr.top + fr.height / 2) - (tr.top + tr.height / 2);
+      if (isFinite(delta) && Math.abs(delta) > 0.5) {
+        let curY = 0; const tf = getComputedStyle(strip).transform;
+        if (tf && tf !== "none") { const m = tf.match(/matrix\(([^)]+)\)/); if (m) { const p = m[1].split(","); curY = parseFloat(p[5]) || 0; } }
+        strip.style.transition = "transform .2s ease"; strip.style.transform = `translateY(${curY + delta}px)`;
+      }
+    } catch (e) {}
+  },
 };
