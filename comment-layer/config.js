@@ -6,10 +6,10 @@
    ============================================================ */
 window.COMMENT_LAYER_CONFIG = {
   // Supabase → Settings → API → Project URL
-  supabaseUrl: "https://YOUR-PROJECT.supabase.co",
+  supabaseUrl: "https://khsfxxfqqdjugbpzumts.supabase.co",
 
   // Supabase → Settings → API → anon / publishable key (safe in client code)
-  anonKey: "YOUR-ANON-KEY",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtoc2Z4eGZxcWRqdWdicHp1bXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NjE4MDksImV4cCI6MjEwMDEzNzgwOX0.RCHLBlB3v9KEf3LKhHfyhH6c3kMGwKc4HdRaGn-YxK0",
 
   // Namespace for this delivery. Change it only if you want a fresh, empty board.
   projectId: "crowns-gg-wireframe",
